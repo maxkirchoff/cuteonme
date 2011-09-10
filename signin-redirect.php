@@ -6,6 +6,8 @@ require_once('./config.php');
 require_once('./lib/twitteroauth/twitteroauth/twitteroauth.php');
 
 /* Build TwitterOAuth object with client credentials. */
+error_log(CONSUMER_KEY.', '.CONSUMER_SECRET);
+
 $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET);
 
 error_log(print_r($connection, true));
