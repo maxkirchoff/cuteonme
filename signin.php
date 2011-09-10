@@ -1,1 +1,1 @@
-tests signing
+<a href="signin-redirect.php"><img src="/static/img/darker.png" alt="Sign in with Twitter"/></a>
