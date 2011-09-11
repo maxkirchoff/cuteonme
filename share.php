@@ -49,7 +49,7 @@ foreach($friendsBatch as $batch) {
 		<tbody>
 			<tr>
 				<th>Link</th>
-				<td><input type="text" name="url" /></td>
+				<td><input type="text" name="url" class="text" /></td>
 			</tr>
 			<tr>
 				<th>Whose opinion do you want?</th>
