@@ -21,7 +21,16 @@ article, aside, details, figcaption, figure, dialog, footer, header, hgroup, men
 body {line-height:1.5;background:white;}
 table {border-collapse:separate;border-spacing:0;}
 caption, th, td {text-align:left;font-weight:normal;float:none !important;}
-table, th, td {vertical-align:middle;}
+table, th, td {vertical-align:top;}
+th {
+	text-align: right;
+	font-size:1.2em;line-height:1.25;margin-bottom:1.25em;
+	padding-top: .4em;
+	padding-right: .5em
+}
+td {
+	padding-bottom: .5em;
+}
 blockquote:before, blockquote:after, q:before, q:after {content:'';}
 blockquote, q {quotes:"" "";}
 a img {border:none;}
@@ -36,8 +45,8 @@ h2 {font-size:1.5em;line-height:1;margin-bottom:1em;}
 h3, .h3 {font-size:1.2em;line-height:1.25;margin-bottom:1.25em;}
 h5 {font-size:1em;font-weight:bold;margin-bottom:1.5em;}
 h6 {font-size:1em;font-weight:bold;}
-h1 img, h2 img, h3 img, h4 img, h5 img, h6 img, p img {margin:0; vertical-align: middle}
-p {margin:0 0 1.5em;}
+h1 img, h2 img, h3 img, h4 img, h5 img, h6 img, p img, li img {margin:0; vertical-align: middle}
+p {margin:0 0 1em;}
 .left {float:left !important;}
 p .left {margin:1.5em 1.5em 1.5em 0;padding:0;}
 .right {float:right !important;}
@@ -54,17 +63,10 @@ del {color:#666;}
 pre {margin:1.5em 0;white-space:pre;}
 pre, code, tt {font:1em 'andale mono', 'lucida console', monospace;line-height:1.5;}
 li ul, li ol {margin:0;}
-ul, ol {margin:0 1.5em 1.5em 0;padding-left:1.5em;}
-ul {list-style-type:disc;}
-ol {list-style-type:decimal;}
 dl {margin:0 0 1.5em 0;}
 dl dt {font-weight:bold;}
 dd {margin-left:1.5em;}
 table {margin-bottom:1.4em;width:100%;}
-th {font-weight:bold;}
-thead th {background:#c3d9ff;}
-th, td, caption {padding:4px 10px 4px 5px;}
-tbody tr:nth-child(even) td, tbody tr.even td {background:#e5ecf9;}
 tfoot {font-style:italic;}
 caption {background:#eee;}
 .small {font-size:.8em;margin-bottom:1.875em;line-height:1.875em;}
@@ -89,10 +91,10 @@ legend, #IE8#HACK {margin-top:0;margin-bottom:0;}
 input[type=text], input[type=password], input[type=url], input[type=email], input.text, input.title, textarea {background-color:#fff;border:1px solid #bbb;color:#000;}
 input[type=text]:focus, input[type=password]:focus, input[type=url]:focus, input[type=email]:focus, input.text:focus, input.title:focus, textarea:focus {border-color:#666;}
 select {background-color:#fff;border-width:1px;border-style:solid;}
-input[type=text], input[type=password], input[type=url], input[type=email], input.text, input.title, textarea, select {margin:0.5em 0;}
-input.text, input.title {width:300px;padding:5px;}
-input.title {font-size:1.5em;}
-textarea {width:390px;height:250px;padding:5px;}
+
+input.text {width:90%; padding: 5px;}
+textarea {	width:90%;height:3em; padding:5px;}
+
 form.inline {line-height:3;}
 form.inline p {margin-bottom:0;}
 .error, .alert, .notice, .success, .info {padding:0.8em;margin-bottom:1em;border:2px solid #ddd;}
@@ -303,7 +305,6 @@ h1 {
 }
 h2 {
 	text-align: center;
-	font-size: 
 }
 h2 span {
 	border: 1px solid #84435e;
@@ -315,4 +316,53 @@ h2 span {
 
 .center {
 	text-align: center;
+}
+
+
+.friends {
+	list-style: none;
+	padding: 5px;
+	background-color: #fff3eb;
+	height: 146px;
+	overflow: scroll;
+}
+
+.friend {
+	background-color: #fff;
+	display: inline-block;
+	list-style: none;
+	margin: 0 1% 1% 0;
+	padding: 0;
+	width: 30%;
+	font-family: sans-serif;
+	border: 1px solid #ffa86e;
+}
+.friend label {
+	display: block;
+	width: 100%;
+}
+
+.bottomless {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.label {
+	font-family: sans-serif;
+	font-size: .8em;
+	color: #999;
+	margin-bottom: .3em;
+}
+
+.ask {
+	color: #fff;
+	background-color: #ea7f66;
+	border: 2px solid #ffa86e;
+	font-size: 1em;
+	-webkit-border-radius:	1em;
+	-moz-border-radius:		1em;
+	border-radius:			1em;
+	display: inline-block;
+	margin: 1em;
+	padding: .3em 1em;
 }

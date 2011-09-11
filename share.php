@@ -42,46 +42,42 @@ foreach($friendsBatch as $batch) {
 }
 ?>
 
-<h2>Share</h2>
+<h1>Cute On Me?</h1>
+<h2><span>Of course it is, but let&rsquo;s make sure&hellip;</span></h2>
 
 <form action="share-submit.php" method="post">
-	<table>
-		<tbody>
-			<tr>
-				<th>Link</th>
-				<td><input type="text" name="url" class="text" /></td>
-			</tr>
-			<tr>
-				<th>Message</th>
-				<td><textarea name="message">Is this cute on me?</textarea></td>
-			</tr>
-			<tr>
-				<th>Whose opinion do you want?</th>
-				<td>
+	<h3 class="bottomless">Link</h3>
+	<p class="label">Paste the page where your friends can check it out</p>
+	<p><input type="text" name="url" class="text" placeholder="http://amazon.com/item123"/></p>
+	
+	<h3 class="bottomless">Message</h3>
+	<p class="label">One sentence &mdash; this has to fit in a Twitter message</p>
+	<p><textarea name="message" maxlength="120">Is this cute on me?</textarea></p>
+
+	<h3 class="bottomless">Select your trusted friends.</h3>
+	<p class="label">We&rsquo;ll send a custom message to each one</p>
+	<ul class="friends">
 <?php
 	foreach($friends as $friend) {
 ?>
-					<label>
-						<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
-						<img src="<?= $friend['profile_image_url'] ?>" alt="" width="48" height="48" />
-						<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
-					</label>
-					<br />
-					
+		<li class="friend">
+			<label>
+				<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
+				<img src="<?= $friend['profile_image_url'] ?>" alt="" width="30" height="30" />
+				<span title="@<?= $friend['screen_name'] ?>"><?= 
+					(strlen($friend['name']) > 12)? 
+						substr($friend['name'], 0, 11)."…"
+					:
+						$friend['name']
+				?></span>
+			</label>
+		</li>
 <?php
 	}
 ?>					
-				</td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td></td>
-				<td><input type="submit" value="Share"/></td>
-			</tr>
-		</tfoot>
-	</table>
+	</ul>
 
+	<p class="right"><input type="submit" value="Ask For Advice" class="ask" /></p>
 </form>
 
 <?php
