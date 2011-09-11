@@ -52,6 +52,10 @@ foreach($friendsBatch as $batch) {
 				<td><input type="text" name="url" class="text" /></td>
 			</tr>
 			<tr>
+				<th>Message</th>
+				<td><textarea name="message">Is this cute on me?</textarea></td>
+			</tr>
+			<tr>
 				<th>Whose opinion do you want?</th>
 				<td>
 <?php
