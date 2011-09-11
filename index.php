@@ -98,6 +98,40 @@ foreach($friendsDetails as $friendDetails) {
 			'screen_name' =>		$friendDetails->screen_name);
 }
 
+// foreach an awesm_id for the original urls
+$awesmIds = array();
+foreach ($urlData as &$url)
+{
+	$encodedUrl = urldecode($url['url']);
+	$statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=awesm_id&user_id={$sharerUserId}&original_url=$encodedUrl&per_page=1";
+	//error_log("Stats api is {$statsApiCall}");
+	$ch = curl_init($statsApiCall);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$response = curl_exec($ch);
+	$results = json_decode($response, true);
+	
+	$awesmIds[] = $results['groups'][0]['awesm_id'];
+}
+
+// fetch notes for the original_urls
+$encodedUrl = urldecode($url['url']);
+$statsApiCall = "http://api.awe.sm/stats/awesm_ids/batch.json?v=3&key={$apiKey}&with_metadata=true&awesm_ids=" . implode(',', $awesmIds) ;
+//error_log("Stats api is {$statsApiCall}");
+$ch = curl_init($statsApiCall);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$results = json_decode($response, true);
+
+$notesData = array();
+foreach ($results['awesm_ids'] as $awesmId)
+{
+	$notesData[$awesmId['metadata']['original_url']] = array(
+			'url' => $awesmId['metadata']['original_url'],
+			'notes' => $awesmId['metadata']['notes']);
+}
+
+//error_log("Awesm_ids are " . print_r($awesmIds, true));
+//error_log("Notes data is " . print_r($notesData, true));
 //echo "friends array is " . print_r($friendsData, true);
 //error_log("Url data is " . print_r($urlData, true));
 //echo "Url metdata is " . print_r($urlMetadata, true);
@@ -118,6 +152,7 @@ foreach($friendsDetails as $friendDetails) {
 <div class="span-16 clearfix result">
 	<div class="span-10">
 		<h3><a href="<?= $url['url'] ?>"><?= empty($urlMetadata[$url['url']]['title']) ? $url['url'] : $urlMetadata[$url['url']]['title'] ?></a></h3>
+		<p><?= $notesData[$url['url']]['notes'] ?></p>
 		<?php foreach($url['users'] as $user){ ?>
 			<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>" alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?> <img <?= $user['response'] ?> alt="cute" width="30" height="30" /></p>
 		<?php } ?>
