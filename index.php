@@ -22,8 +22,10 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 $results = json_decode($response, true);
 
+
 $urlData = array();
 $uniqueUserIds = array();
+
 foreach ($results['groups'] as $originalUrl)
 {
 	$users = array();
@@ -103,12 +105,15 @@ foreach($friendsDetails as $friendDetails) {
 ?>
 
 <h1>Cute On Me?</h1>
+
+<?php if ($results['total_results'] != 0) {?>
+
 <h2><span>Your Results</h2>
 
 
 <!-- Repeat Start -->
 <?php
-	foreach($urlData as $url) {
+		foreach($urlData as $url) {
 ?>
 <div class="span-16 clearfix result">
 	<div class="span-10">
@@ -125,6 +130,11 @@ foreach($friendsDetails as $friendDetails) {
 	</div>
 </div>
 <?php
+		}
+	} else {
+?>
+<h3>You haven't asked any opinions yet.</h3>
+<?php		
 	}
 ?>	
 <!-- Repeat End -->
