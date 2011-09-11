@@ -66,7 +66,7 @@ $url = $_REQUEST['url'];
 				<img src="<?= $friend['profile_image_url'] ?>" alt="" width="30" height="30" />
 				<span title="@<?= $friend['screen_name'] ?>"><?= 
 					(strlen($friend['name']) > 12)? 
-						substr($friend['name'], 0, 11)."É"
+						substr($friend['name'], 0, 11) . "..."
 					:
 						$friend['name']
 				?></span>
