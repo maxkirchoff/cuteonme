@@ -59,7 +59,7 @@ foreach($friendsBatch as $batch) {
 ?>
 					<label>
 						<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
-						<img src="<?= $friend['profile_image_url'] ?>" alt="" />
+						<img src="<?= $friend['profile_image_url'] ?>" alt="" width="48" height="48" />
 						<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
 					</label>
 					<br />
