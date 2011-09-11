@@ -24,11 +24,11 @@ $results = json_decode($response, true);
 
 $urlData = array();
 $uniqueUserIds = array();
-$positiveResponses = 0;
-$negativeResponses = 0;
 foreach ($results['groups'] as $originalUrl)
 {
 	$users = array();
+	$positiveResponses = 0;
+	$negativeResponses = 0;
 	foreach ($originalUrl['pivots'] as $pivot)
 	{
 		if ($pivot['conversions']['goal_1']['count'] > 0)
@@ -97,7 +97,7 @@ foreach($friendsDetails as $friendDetails) {
 }
 
 //echo "friends array is " . print_r($friendsData, true);
-//echo "Url data is " . print_r($urlData, true);
+//error_log("Url data is " . print_r($urlData, true));
 //echo "Url metdata is " . print_r($urlMetadata, true);
 
 ?>
