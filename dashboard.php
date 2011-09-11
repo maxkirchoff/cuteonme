@@ -1,6 +1,6 @@
 <?php
+$title = 'Cute On Me Results';
 require('./template-header.php');
-
 
 // build oauth object
 $connection = new TwitterOAuth(
@@ -94,9 +94,27 @@ echo "Url metdata is " . print_r($urlMetadata, true);
 
 ?>
 
-User authed. w00t.
+<h1>Cute On Me?</h1>
+<h2><span>Your Results</h2>
 
-<?php print_r($_SESSION); ?>
+
+<!-- Repeat Start -->
+<div class="span-16 clearfix result">
+	<div class="span-10">
+		<h3><a href="http://amazon.com/">Page Title of Some Item</a></h3>
+		<p><img src="http://a2.twimg.com/profile_images/1258715561/linked_normal.jpg" alt="" width="30" height="30" /> John Boy Billy <img src="/static/img/thumbs-up.png" alt="cute" width="30" height="30" /></p>
+		<p><img src="http://a3.twimg.com/profile_images/1119551297/dougw_avatar_normal.png" alt="" width="30" height="30" /> Suzie Anthony <img src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" /></p>
+	</div>
+	<div class="span-6 last">
+		<p class="right">
+			<img src="/static/img/thumbs-up.png" alt="cute" width="30" height="30" /> 40%
+			<img src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" /> 60%
+		</p>
+	</div>
+</div>
+<!-- Repeat End -->
+
+<p class="right"><input type="submit" value="Ask For Advice" class="button" /></p>
 
 <?php
 require('./template-footer.php');	
