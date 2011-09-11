@@ -274,6 +274,7 @@ html {
 }
 body {
 	background-color: #b15a7e;
+	background-image: url(/static/img/bg.png);
 	height: 100%;
 	font-family: 'Podkova', sans-serif;
 }
