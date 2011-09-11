@@ -24,6 +24,8 @@ $results = json_decode($response, true);
 
 $urlData = array();
 $uniqueUserIds = array();
+$positiveResponses = 0;
+$negativeResponses = 0;
 foreach ($results['groups'] as $originalUrl)
 {
 	$users = array();
@@ -32,10 +34,12 @@ foreach ($results['groups'] as $originalUrl)
 		if ($pivot['conversions']['goal_1']['count'] > 0)
 		{
 			$userResponse = 'src="/static/img/thumbs-up.png"';
+			$positiveResponses++;
 		}
 		elseif ($pivot['conversions']['goal_2']['count'] > 0) 
 		{
 			$userResponse = 'src="/static/img/thumbs-down.png"';
+			$negativeResponses++;
 		}
 		else
 		{
@@ -49,9 +53,13 @@ foreach ($results['groups'] as $originalUrl)
 		$uniqueUserIds[$pivot['tag']] = $pivot['tag'];
 	}
 
+	$percentPositive = ($positiveResponses * 100) / count($users);
+	$percentNegative = ($negativeResponses * 100) / count($users);
 	$urlData[$originalUrl['original_url']] = array(
 			'url' => $originalUrl['original_url'],
-			'users' => $users);
+			'users' => $users,
+			'percent_positive' => $percentPositive,
+			'percent_negative' => $percentNegative);
 } 
 
 // fetch original url metadata
@@ -111,8 +119,8 @@ foreach($friendsDetails as $friendDetails) {
 	</div>
 	<div class="span-6 last">
 		<p class="right">
-			<img src="/static/img/thumbs-up.png" alt="cute" width="30" height="30" /> 40%
-			<img src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" /> 60%
+			<img src="/static/img/thumbs-up.png" alt="cute" width="30" height="30" /> <?= $url['percent_positive'] ?>%
+			<img src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" /> <?= $url['percent_negative'] ?>%
 		</p>
 	</div>
 </div>
