@@ -55,8 +55,8 @@ foreach ($results['groups'] as $originalUrl)
 		$uniqueUserIds[$pivot['tag']] = $pivot['tag'];
 	}
 
-	$percentPositive = ($positiveResponses * 100) / count($users);
-	$percentNegative = ($negativeResponses * 100) / count($users);
+	$percentPositive = round(($positiveResponses * 100) / count($users), 2);
+	$percentNegative = round(($negativeResponses * 100) / count($users), 2);
 	$urlData[$originalUrl['original_url']] = array(
 			'url' => $originalUrl['original_url'],
 			'users' => $users,
@@ -100,11 +100,11 @@ foreach($friendsDetails as $friendDetails) {
 
 // foreach an awesm_id for the original urls
 $awesmIds = array();
-foreach ($urlData as &$url)
+foreach ($urlData as $url)
 {
 	$encodedUrl = urldecode($url['url']);
-	$statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=awesm_id&user_id={$sharerUserId}&original_url=$encodedUrl&per_page=1";
-	//error_log("Stats api is {$statsApiCall}");
+	$statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=awesm_id&user_id={$sharerUserId}&original_url={$encodedUrl}&per_page=1";
+	error_log("Stats api is {$statsApiCall}");
 	$ch = curl_init($statsApiCall);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	$response = curl_exec($ch);
