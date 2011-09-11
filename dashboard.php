@@ -112,7 +112,7 @@ foreach($friendsDetails as $friendDetails) {
 ?>
 <div class="span-16 clearfix result">
 	<div class="span-10">
-		<h3><a href="<?= $url['url'] ?>"><?= $urlMetadata[$url['url']]['title'] ?></a></h3>
+		<h3><a href="<?= $url['url'] ?>"><?= empty($urlMetadata[$url['url']]['title']) ? $url['url'] : $urlMetadata[$url['url']]['title'] ?></a></h3>
 		<?php foreach($url['users'] as $user){ ?>
 			<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>" alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?> <img <?= $user['response'] ?> alt="cute" width="30" height="30" /></p>
 		<?php } ?>
