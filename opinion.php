@@ -54,7 +54,7 @@ else
 	</div>
 </div>
 
-<iframe src="<?= $_REQUEST['url'] ?>" width="100%" height="84%" frameborder="0"></iframe>
+<iframe src="<?= $_REQUEST['url'] ?>" width="100%" height="89%" frameborder="0"></iframe>
 
 <script src="http://widgets.awe.sm/v3/widgets.js?key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743"></script>
 <script>
