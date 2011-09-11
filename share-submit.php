@@ -10,11 +10,9 @@ $connection = new TwitterOAuth(
 );
 
 // extract values from request
-$apiKey = '103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743';
-//$url = 'http://idunnowhatdoyouthink.com/?share_user=&url=http%3A%2F%2Ftechcrunch.com%2F2011%2F09%2F10%2Fthe-disrupt-hackathon-in-san-francisco-has-officially-begun%2F';
+$apiKey = API_KEY;
 $url = $_REQUEST['url'];
-$sharerUserId = '12345';
-//$friendUserIds = array('testme1111', 'jeremiahlee');
+$sharerUserId = $_SESSION['access_token']['user_id']
 $friendUserIds = $_REQUEST['friends'];
 
 // create awe.sm shares
@@ -36,12 +34,10 @@ foreach ($awesmUrls as $awesmUrl)
 	$shareUrl = $awesmUrl['awesm_url'];
 	$dmUserId = $awesmUrl['tag'];
 	$text = "Check out this link: {$shareUrl}";
-	$parameters = array('screen_name' => $dmUserId, 'text' => $text);
+	$parameters = array('user_id' => $dmUserId, 'text' => $text);
 	$method = 'direct_messages/new';
 	$dm = $connection->post($method, $parameters);	
 	echo "<br> dm'd {$shareUrl} for user {$dmUserId}";
-	
-	// Retry DM if failed
 }
 
 echo "<br>Success";
