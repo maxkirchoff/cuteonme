@@ -16,7 +16,7 @@ $sharerUserId = $_SESSION['access_token']['user_id'];
 
 // fetch original urls and conversions
 $statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=original_url&pivot=tag&with_conversions=true&user_id={$sharerUserId}";
-echo "<br>url called is " .print_r($statsApiCall, true) . "<br>";
+//echo "<br>url called is " .print_r($statsApiCall, true) . "<br>";
 $ch = curl_init($statsApiCall);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
@@ -31,15 +31,15 @@ foreach ($results['groups'] as $originalUrl)
 	{
 		if ($pivot['conversions']['goal_1']['count'] > 0)
 		{
-			$userResponse = 'yes';
+			$userResponse = 'src="/static/img/thumbs-up.png"';
 		}
 		elseif ($pivot['conversions']['goal_2']['count'] > 0) 
 		{
-			$userResponse = 'no';
+			$userResponse = 'src="/static/img/thumbs-down.png"';
 		}
 		else
 		{
-			$userResponse = 'no response';
+			$userResponse = '';
 		}
 		
 		
@@ -56,7 +56,7 @@ foreach ($results['groups'] as $originalUrl)
 
 // fetch original url metadata
 $statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=original_url&with_metadata=true&user_id={$sharerUserId}";
-echo "<br>url called is " .print_r($statsApiCall, true) . "<br>";
+//echo "<br>url called is " .print_r($statsApiCall, true) . "<br>";
 $ch = curl_init($statsApiCall);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
@@ -88,9 +88,9 @@ foreach($friendsDetails as $friendDetails) {
 			'screen_name' =>		$friendDetails->screen_name);
 }
 
-echo "friends array is " . print_r($friendsData, true);
-echo "Url data is " . print_r($urlData, true);
-echo "Url metdata is " . print_r($urlMetadata, true);
+//echo "friends array is " . print_r($friendsData, true);
+//echo "Url data is " . print_r($urlData, true);
+//echo "Url metdata is " . print_r($urlMetadata, true);
 
 ?>
 
@@ -99,11 +99,15 @@ echo "Url metdata is " . print_r($urlMetadata, true);
 
 
 <!-- Repeat Start -->
+<?php
+	foreach($urlData as $url) {
+?>
 <div class="span-16 clearfix result">
 	<div class="span-10">
-		<h3><a href="http://amazon.com/">Page Title of Some Item</a></h3>
-		<p><img src="http://a2.twimg.com/profile_images/1258715561/linked_normal.jpg" alt="" width="30" height="30" /> John Boy Billy <img src="/static/img/thumbs-up.png" alt="cute" width="30" height="30" /></p>
-		<p><img src="http://a3.twimg.com/profile_images/1119551297/dougw_avatar_normal.png" alt="" width="30" height="30" /> Suzie Anthony <img src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" /></p>
+		<h3><a href="<?= $url['url'] ?>"><?= $urlMetadata[$url['url']]['title'] ?></a></h3>
+		<?php foreach($url['users'] as $user){ ?>
+			<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>" alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?> <img <?= $user['response'] ?> alt="cute" width="30" height="30" /></p>
+		<?php } ?>
 	</div>
 	<div class="span-6 last">
 		<p class="right">
@@ -112,6 +116,9 @@ echo "Url metdata is " . print_r($urlMetadata, true);
 		</p>
 	</div>
 </div>
+<?php
+	}
+?>	
 <!-- Repeat End -->
 
 <p class="right"><input type="submit" value="Ask For Advice" class="button" /></p>
