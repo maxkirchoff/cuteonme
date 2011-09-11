@@ -12,7 +12,7 @@ $connection = new TwitterOAuth(
 // extract values from request
 $apiKey = API_KEY;
 $url = $_REQUEST['url'];
-$sharerUserId = $_SESSION['access_token']['user_id']
+$sharerUserId = $_SESSION['access_token']['user_id'];
 $friendUserIds = $_REQUEST['friends'];
 
 // create awe.sm shares
