@@ -77,8 +77,11 @@ foreach($friendsBatch as $batch) {
 	}
 ?>					
 	</ul>
-
-	<p class="right"><input type="submit" value="Ask For Advice" class="button" /></p>
+	
+	<div class="span-16 clearfix">
+		<div class="span-8"><p class="back"><a href="/">Never Mind</a></p></div>
+		<div class="span-8 last right"><input type="submit" value="Ask For Advice" class="button" /></div>
+	</div>
 </form>
 
 <?php

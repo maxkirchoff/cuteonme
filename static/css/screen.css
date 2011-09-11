@@ -367,10 +367,18 @@ h2 span {
 	line-height: 1em;
 	cursor: default;
 	text-decoration: none;
+	vertical-align: middle;
 }
 .button:hover {
 	color: #fff;
 }
+
+.back {
+	margin: 1.5em 1em;
+	font-size: .8em;
+	line-height: 1.5em;
+}
+
 
 .footer {
 	font-size: .7em;
