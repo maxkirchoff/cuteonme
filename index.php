@@ -3,7 +3,8 @@
 	require('./template-header.php');
 ?>
 
-You should join us!
+<h1>Cute On Me?</h1>
+<h2>Quick Fashion Advice From Your Friends</h2>
 
 <?php
 	require('./template-footer.php');

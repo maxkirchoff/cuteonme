@@ -27,4 +27,4 @@ if (!empty($_REQUEST['oauth_token']) && !empty($_REQUEST['oauth_verifier'])) {
 
 </head>
 <body>
-	<div class="container">
+	<div class="outerContainer"><div class="container">
