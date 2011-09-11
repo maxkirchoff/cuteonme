@@ -1,5 +1,5 @@
 <?php
-require('./template.php');	
+require('./template-header.php');	
 ?>
 
 User authed. w00t.
