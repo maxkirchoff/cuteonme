@@ -4,35 +4,43 @@ require('./template-header.php');
 // Setup Twitter Connection
 $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $_SESSION['access_token']['oauth_token'], $_SESSION['access_token']['oauth_token_secret']);
 
-print_r($_SESSION);
+// Get list of friends
+$friends = array();
 
-// Get the signed in user's Twitter friend list
-$user = $connection->get('account/verify_credentials');
-echo 'asdfasdf';
-print_r($user);
-
-$friends = $connection->get(
+// Get the signed in user's Twitter friends' IDs
+$friendsIds = $connection->get(
 	'friends/ids',
 	array (
-		'user_id'	=> $user['user_id']
+		'user_id'	=> $_SESSION['access_token']['user_id']
 	)
 );
+// TODO: $connection->http_code
 
-switch ($connection->http_code) {
-	case 200:
+// Now, find the information about those friends in a batched manner.
+$friendsBatch = array_chunk($friendsIds, 100);
+
+foreach($friendsBatch as $batch) {
+	// Get friend details
+	$friendsDetails = $connection->get(
+		'users/lookup',
+		array(
+			'user_id' => implode(',', $batch)
+		)
+	);
 	
-		break;
-	
-	default:
-	
-		break;
+	// Save select friend details
+	foreach($friendsDetails as $friendDetails) {
+		if ($friendDetails->following === true) {
+			$friends[] = array(
+				'id' => 				$friendDetails->id,
+				'profile_image_url' =>	$friendDetails->profile_image_url,
+				'name' =>				$friendDetails->name,
+				'screen_name' =>		$friendDetails->screen_name
+			);
+		}
+	}
 }
-
-
-// 
-
 ?>
-
 
 <h2>Share</h2>
 
@@ -46,11 +54,19 @@ switch ($connection->http_code) {
 			<tr>
 				<th>Whose opinion do you want?</th>
 				<td>
-					(insert friend list)
+<?php
+	foreach($friends as $friend) {
+?>
+					<label>
+						<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
+						<img src="<?= $friend['profile_image_url'] ?>" alt="" />
+						<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
+					</label>
+					<br />
 					
-					<input type="text" name="friends[]" />
-					<input type="text" name="friends[]" />
-					<input type="text" name="friends[]" />
+<?php
+	}
+?>					
 				</td>
 			</tr>
 		</tbody>
