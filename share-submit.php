@@ -14,15 +14,17 @@ $apiKey = API_KEY;
 $url = $_REQUEST['url'];
 $sharerUserId = $_SESSION['access_token']['user_id'];
 $sharerUsername = $_SESSION['access_token']['screen_name'];
+$sharerIconUrl = $_SESSION['access_token']['profile_image_url'];
 $friendUserIds = $_REQUEST['friends'];
 $message = $_REQUEST['message'];
 
 // create awe.sm shares
 $encodedUrl = urlencode($url);
 $encodedMessage = urlencode($message);
+$encodedSharerIconUrl = urlencode($sharerIconUrl);
 $awesmApiURL = "http://api.awe.sm/url/batch.json?v=3&key={$apiKey}" .
 	"&url={$encodedUrl}&channel=twitter&tool=tHSSFr&user_id={$sharerUserId}" . 
-	"&notes={$encodedMessage}&user_id_username={$sharerUsername}&";
+	"&notes={$encodedMessage}&user_id_username={$sharerUsername}&user_id_icon_url={$encodedSharerIconUrl}&";
 foreach ($friendUserIds as $friendUserId)
 {
 	$awesmApiURL .= "tag[]={$friendUserId}&";
