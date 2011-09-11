@@ -14,9 +14,6 @@ if (!empty($_REQUEST['oauth_token']) && !empty($_REQUEST['oauth_verifier'])) {
 } elseif (empty($_SESSION['access_token']) && empty($unauthedAllowed)) {
 	// No session and the page requires a session
 	header('Location: ./signin.php');
-} elseif (!empty($unauthedAllowed)) {
-	// User has a session
-	header('Location: ./dashboard.php');
 }
 ?>
 
