@@ -33,7 +33,7 @@ $friends = array();
 
 // Get the signed in user's Twitter friends' IDs
 $friendsIds = $connection->get(
-	'followers/ids',
+	'friends/ids',
 	array (
 		'user_id'	=> $_SESSION['access_token']['user_id']
 	)
