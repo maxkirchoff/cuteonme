@@ -49,7 +49,7 @@ h1 img, h2 img, h3 img, h4 img, h5 img, h6 img, p img, li img {margin:0; vertica
 p {margin:0 0 1em;}
 .left {float:left !important;}
 p .left {margin:1.5em 1.5em 1.5em 0;padding:0;}
-.right {float:right !important;}
+.right {text-align: right}
 p .right {margin:1.5em 0 1.5em 1.5em;padding:0;}
 a:focus, a:hover {color:#09f;}
 a {color:#06c;text-decoration:underline;}
@@ -110,7 +110,7 @@ form.inline p {margin-bottom:0;}
 /* grid.css */
 .container {width:630px;margin:0 auto;}
 .showgrid {background:url(src/grid.png);}
-.column, .span-1, .span-2, .span-3, .span-4, .span-5, .span-6, .span-7, .span-8, .span-9, .span-10, .span-11, .span-12, .span-13, .span-14, .span-15, .span-16, .span-17, .span-18, .span-19, .span-20, .span-21, .span-22, .span-23, .span-24 {float:left;margin-right:10px;}
+.column, .span-1, .span-2, .span-3, .span-4, .span-5, .span-6, .span-7, .span-8, .span-9, .span-10, .span-11, .span-12, .span-13, .span-14, .span-15{float:left;margin-right:10px;}
 .last {margin-right:0;}
 .span-1 {width:30px;}
 .span-2 {width:70px;}
@@ -378,4 +378,17 @@ h2 span {
 }
 .button:hover {
 	color: #fff;
+}
+
+.footer {
+	font-size: .7em;
+	color: #999;
+	background-image: url(/static/img/favicon.png);
+	background-repeat: no-repeat;
+	background-position: center right;
+	line-height: 32px;
+}
+
+.bottom {
+	padding-bottom: 3em;
 }

@@ -6,7 +6,7 @@
 <h1>Cute On Me?</h1>
 <h2><span>Quick Fashion Advice From Your Friends</span></h2>
 
-<div class="span-16">
+<div class="span-16 clearfix bottom">
 	<div class="span-7 prepend-1">
 		<p>When you're trying to decide what to buy, let your social network help you make up your mind.</p>
 		
