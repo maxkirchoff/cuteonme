@@ -129,7 +129,7 @@ foreach($friendsDetails as $friendDetails) {
 ?>	
 <!-- Repeat End -->
 
-<p class="right"><input type="submit" value="Ask For Advice" class="button" /></p>
+<form action="share.php" method="get"><p class="right"><input type="submit" value="Ask For Advice" class="button" /></p></form>
 
 <?php
 require('./template-footer.php');	
