@@ -9,7 +9,7 @@ $connection = new TwitterOAuth(
 	$_SESSION['access_token']['oauth_token_secret']
 );
 
-// extract values from request
+// extract values from request and session
 $apiKey = API_KEY;
 $url = $_REQUEST['url'];
 $sharerUserId = $_SESSION['access_token']['user_id'];
