@@ -1,0 +1,15 @@
+<html>
+<body>
+<script>
+javascript:chrome.tabs.getSelected(null, function(tab){
+    ifr = document.createElement("iframe");
+    ifr.src = "http://www.cuteon.me/share-small.php?url=" + tab.url;
+    ifr.width = "800px";
+    ifr.height = "600px";
+    ifr.frameborder = "0";
+    document.body.appendChild(ifr);    
+    });
+</script>
+</body>
+</html>
+
