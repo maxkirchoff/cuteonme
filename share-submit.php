@@ -29,7 +29,7 @@ foreach ($friendUserIds as $friendUserId)
 {
 	$awesmApiURL .= "tag[]={$friendUserId}&";
 }
-echo "<br>url called is " .print_r($awesmApiURL, true) . "<br>";
+// echo "<br>url called is " .print_r($awesmApiURL, true) . "<br>";
 $ch = curl_init($awesmApiURL);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
@@ -45,10 +45,14 @@ foreach ($awesmUrls as $awesmUrl)
 	$parameters = array('user_id' => $dmUserId, 'text' => $text);
 	$method = 'direct_messages/new';
 	$dm = $connection->post($method, $parameters);	
-	echo "<br> dm'd {$shareUrl} for user {$dmUserId}";
+//	echo "<br> dm'd {$shareUrl} for user {$dmUserId}";
 }
-
-echo "<br>Success";
-
-	
 ?>
+
+<h1>Cute On Me?</h1>
+<h2><span>We&rsquo;ll see what your friends say&hellip;</span></h2>
+
+<p>A direct message has been sent to your selected friends on Twitter.</p>
+<p>Return to <em>Cute On Me</em> to see the results.</p>
+
+<div class="right"><a href="/dashboard.php" class="button">Alrighty Then</a></div>

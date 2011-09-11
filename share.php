@@ -77,7 +77,7 @@ foreach($friendsBatch as $batch) {
 ?>					
 	</ul>
 
-	<p class="right"><input type="submit" value="Ask For Advice" class="ask" /></p>
+	<p class="right"><input type="submit" value="Ask For Advice" class="button" /></p>
 </form>
 
 <?php
