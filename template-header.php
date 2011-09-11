@@ -11,8 +11,12 @@ if (!empty($_REQUEST['oauth_token']) && !empty($_REQUEST['oauth_verifier'])) {
 	// Save the access tokens. Normally these would be saved in a database for future use.
 	$_SESSION['access_token'] = $connection->getAccessToken($_REQUEST['oauth_verifier']);
 	
-} elseif (empty($_SESSION['access_token'])) {
+} elseif (empty($_SESSION['access_token']) && empty($unauthedAllowed)) {
+	// No session and the page requires a session
 	header('Location: ./signin.php');
+} elseif ($unauthedAllowed) {
+	// User has a session
+	header('Location: ./dashboard.php');
 }
 ?>
 
@@ -26,3 +30,4 @@ if (!empty($_REQUEST['oauth_token']) && !empty($_REQUEST['oauth_verifier'])) {
 
 </head>
 <body>
+	<div class="container">
