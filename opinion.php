@@ -48,7 +48,7 @@ else
 		</div>
 		<div class="span-14 last">
 			<p>
-				Thanks for helping out <em>@<?= $_REQUEST['sharer'] ?></em>!<br /><a href="/">Need fashion advice yourself?</a>
+				Thanks for helping out <em>@<?= $_REQUEST['sharer'] ?></em>!<br /><a href="/">Need shopping advice yourself?</a>
 			</p>
 		</div>
 	</div>
