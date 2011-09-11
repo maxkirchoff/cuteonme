@@ -1,4 +1,5 @@
 <?php
+$title = 'Is this cute on me?';
 require('./template-header.php');
 
 // Setup Twitter Connection

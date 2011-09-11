@@ -1,4 +1,5 @@
 <?php
+$title = 'We&rsquo;ll see what your friends say&hellip;';
 require('./template-header.php');	
 
 // build oauth object
