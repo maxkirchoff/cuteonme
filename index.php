@@ -15,30 +15,46 @@ $apiKey = API_KEY;
 $sharerUserId = $_SESSION['access_token']['user_id'];
 
 // fetch original urls and conversions
-$statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=original_url&pivot=tag&with_conversions=true&user_id={$sharerUserId}";
-//echo "<br>url called is " .print_r($statsApiCall, true) . "<br>";
+$statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=original_url&" .
+    "&sort_type=shared_at&user_id={$sharerUserId}";
+error_log("Stats api is {$statsApiCall}");
 $ch = curl_init($statsApiCall);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 $results = json_decode($response, true);
 
-
 $urlData = array();
 $uniqueUserIds = array();
 
-foreach ($results['groups'] as $originalUrl)
+foreach ($results['groups'] as $originalUrlGroup)
 {
+    // extract the url 
+    $url = $originalUrlGroup['original_url'];
+    
+    
+    // fetch the users the url was shared to
+    $encodedUrl = urlencode($url);
+    $statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&original_url={$encodedUrl}&" .
+        "group_by=tag&with_conversions=true&user_id={$sharerUserId}";
+    error_log("Stats api call {$statsApiCall}");
+    
+    $ch = curl_init($statsApiCall);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    $results = json_decode($response, true);
+        
+    // for each user, calculate if they said yes/no
 	$users = array();
 	$positiveResponses = 0;
 	$negativeResponses = 0;
-	foreach ($originalUrl['pivots'] as $pivot)
+	foreach ($results['groups'] as $tagGroup)
 	{
-		if ($pivot['conversions']['goal_1']['count'] > 0)
+		if ($tagGroup['conversions']['goal_1']['count'] > 0)
 		{
 			$userResponse = 'src="/static/img/thumbs-up.png"';
 			$positiveResponses++;
 		}
-		elseif ($pivot['conversions']['goal_2']['count'] > 0) 
+		elseif ($tagGroup['conversions']['goal_2']['count'] > 0) 
 		{
 			$userResponse = 'src="/static/img/thumbs-down.png"';
 			$negativeResponses++;
@@ -49,38 +65,61 @@ foreach ($results['groups'] as $originalUrl)
 		}
 		
 		
-		$users[$pivot['tag']] = array(
-				'user_id' => $pivot['tag'],
+		$users[] = array(
+				'user_id' => $tagGroup['tag'],
 				'response' => $userResponse);
-		$uniqueUserIds[$pivot['tag']] = $pivot['tag'];
+		$uniqueUserIds[$tagGroup['tag']] = $tagGroup['tag'];
 	}
 
-	$percentPositive = round(($positiveResponses * 100) / count($users), 2);
-	$percentNegative = round(($negativeResponses * 100) / count($users), 2);
-	$urlData[$originalUrl['original_url']] = array(
-			'url' => $originalUrl['original_url'],
+	if (count($users) > 0 )
+	{
+	   $percentPositive = round(($positiveResponses * 100) / count($users), 2);
+	   $percentNegative = round(($negativeResponses * 100) / count($users), 2);
+	}
+	else 
+	{
+	   $percentPositive = 0;
+	   $percentNegative = 0;    
+	}
+	
+	// fetch metadata associated with a url
+    $statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&original_url={$encodedUrl}&" .
+            "with_metadata=true&user_id={$sharerUserId}&per_page=1";
+    error_log("Stats api is {$statsApiCall}");
+    $ch = curl_init($statsApiCall);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    $results = json_decode($response, true);
+	$urlTitle = $results['group'][0]['metadata']['title'];
+	$urlIconUrl = $results['group'][0]['metadata']['icon_url'];
+    
+	// fetch the message that was shared with the url
+    $statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=awesm_id&" .
+           "user_id={$sharerUserId}&original_url={$encodedUrl}&per_page=1&with_metadata=true";
+    error_log("Stats api is {$statsApiCall}");
+    $ch = curl_init($statsApiCall);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    $results = json_decode($response, true);
+    $message = $results['groups'][0]['metadata']['notes'];
+	
+	// fetch metadata
+    
+	
+	$urlData[] = array(
+			'url' => $url,
 			'users' => $users,
 			'percent_positive' => $percentPositive,
-			'percent_negative' => $percentNegative);
+			'percent_negative' => $percentNegative,
+            'message' => $message,
+	        'title' => $urlTitle,
+	        'icon_url' => $urlIconUrl);
 } 
 
-// fetch original url metadata
-$statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=original_url&with_metadata=true&user_id={$sharerUserId}";
-//echo "<br>url called is " .print_r($statsApiCall, true) . "<br>";
-$ch = curl_init($statsApiCall);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-$results = json_decode($response, true);
-
-$urlMetadata = array();
-foreach ($results['groups'] as $originalUrl)
-{
-	$urlMetadata[$originalUrl['original_url']] = array(
-			'title' => $originalUrl['metadata']['title'],
-			'icon_url' => $originalUrl['metadata']['icon_url']);
-}
+error_log("Url data is " . print_r($urlData, true));
 
 // fetch user information
+$friendsData = array();
 $friendsDetails = $connection->get(
 	'users/lookup',
 	array(
@@ -98,49 +137,11 @@ foreach($friendsDetails as $friendDetails) {
 			'screen_name' =>		$friendDetails->screen_name);
 }
 
-// foreach an awesm_id for the original urls
-$awesmIds = array();
-foreach ($urlData as $url)
-{
-	$encodedUrl = urldecode($url['url']);
-	$statsApiCall = "http://api.awe.sm/stats/range.json?v=3&key={$apiKey}&group_by=awesm_id&user_id={$sharerUserId}&original_url={$encodedUrl}&per_page=1";
-	error_log("Stats api is {$statsApiCall}");
-	$ch = curl_init($statsApiCall);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$response = curl_exec($ch);
-	$results = json_decode($response, true);
-	
-	$awesmIds[] = $results['groups'][0]['awesm_id'];
-}
-
-// fetch notes for the original_urls
-$encodedUrl = urldecode($url['url']);
-$statsApiCall = "http://api.awe.sm/stats/awesm_ids/batch.json?v=3&key={$apiKey}&with_metadata=true&awesm_ids=" . implode(',', $awesmIds) ;
-//error_log("Stats api is {$statsApiCall}");
-$ch = curl_init($statsApiCall);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-$results = json_decode($response, true);
-
-$notesData = array();
-foreach ($results['awesm_ids'] as $awesmId)
-{
-	$notesData[$awesmId['metadata']['original_url']] = array(
-			'url' => $awesmId['metadata']['original_url'],
-			'notes' => $awesmId['metadata']['notes']);
-}
-
-//error_log("Awesm_ids are " . print_r($awesmIds, true));
-//error_log("Notes data is " . print_r($notesData, true));
-//echo "friends array is " . print_r($friendsData, true);
-//error_log("Url data is " . print_r($urlData, true));
-//echo "Url metdata is " . print_r($urlMetadata, true);
-
 ?>
 
 <h1>Cute On Me?</h1>
 
-<?php if ($results['total_results'] != 0) {?>
+<?php if (!empty($urlData)) {?>
 
 <h2><span>Your Results</h2>
 
@@ -151,8 +152,8 @@ foreach ($results['awesm_ids'] as $awesmId)
 ?>
 <div class="span-16 clearfix result">
 	<div class="span-10">
-		<h3><a href="<?= $url['url'] ?>"><?= empty($urlMetadata[$url['url']]['title']) ? $url['url'] : $urlMetadata[$url['url']]['title'] ?></a></h3>
-		<p><?= $notesData[$url['url']]['notes'] ?></p>
+		<h3><a href="<?= $url['url'] ?>"><?= empty($url['title']) ? $url['url'] : $url['title'] ?></a></h3>
+		<p><?= $url['message'] ?></p>
 		<?php foreach($url['users'] as $user){ ?>
 			<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>" alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?> <img <?= $user['response'] ?> alt="cute" width="30" height="30" /></p>
 		<?php } ?>
