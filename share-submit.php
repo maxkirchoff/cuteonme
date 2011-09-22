@@ -1,6 +1,6 @@
 <?php
 $title = 'We&rsquo;ll see what your friends say&hellip;';
-require('./template-header.php');	
+require('./template/header.php');	
 
 // build oauth object
 $connection = new TwitterOAuth(
@@ -93,5 +93,5 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 <div class="right bottom"><a href="/index.php" class="button">Alrighty Then</a></div>
 
 <?php
-require('./template-footer.php');
+require('./template/footer.php');
 ?>

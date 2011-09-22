@@ -1,6 +1,6 @@
 <?php
 $title = 'Cute On Me Results';
-require('./template-header.php');
+require('./template/header.php');
 
 // build oauth object
 $connection = new TwitterOAuth(
@@ -193,5 +193,5 @@ foreach($friendsApiResults as $friendsApiResult) {
 <form action="share.php" method="get"><p class="right"><input type="submit" value="Ask For Advice" class="button" /></p></form>
 
 <?php
-require('./template-footer.php');	
+require('./template/footer.php');	
 ?>

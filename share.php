@@ -1,6 +1,6 @@
 <?php
 $title = 'Is this cute on me?';
-require('./template-header.php');
+require('./template/header.php');
 
 // Setup Twitter Connection
 $connection = new TwitterOAuth(
@@ -92,5 +92,5 @@ foreach($friendsBatch as $batch) {
 </form>
 
 <?php
-require('./template-footer.php');	
+require('./template/footer.php');	
 ?>

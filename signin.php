@@ -1,6 +1,6 @@
 <?php
 	$unauthedAllowed = true;
-	require('./template-header.php');
+	require('./template/header.php');
 ?>
 
 <h1>Cute On Me?</h1>
@@ -18,5 +18,5 @@
 </div>
 
 <?php
-	require('./template-footer.php');
+	require('./template/footer.php');
 ?>
