@@ -3,23 +3,36 @@ $title = 'Is this cute on me?';
 require('./template-header.php');
 
 // Setup Twitter Connection
-$connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $_SESSION['access_token']['oauth_token'], $_SESSION['access_token']['oauth_token_secret']);
+$connection = new TwitterOAuth(
+    CONSUMER_KEY, 
+    CONSUMER_SECRET, 
+    $_SESSION['access_token']['oauth_token'], 
+    $_SESSION['access_token']['oauth_token_secret']);
 
 // Get list of friends
 $friends = array();
 
-// Get the signed in user's Twitter friends' IDs
+// Get the signed in user's Twitter friends IDs
 $friendsIds = $connection->get(
 	'friends/ids',
 	array (
 		'user_id'	=> $_SESSION['access_token']['user_id']
 	)
 );
-// TODO: $connection->http_code
+
+// Get the signed in user's Twitter followers IDs
+$follwersIds = $connection->get(
+    'followers/ids',
+    array (
+        'user_id'   => $_SESSION['access_token']['user_id']
+    )
+);
+
+// create the users that are followers and friends
+$mutualFriends = array_intersect($friendsIds, $follwersIds);
 
 // Now, find the information about those friends in a batched manner.
-$friendsBatch = array_chunk($friendsIds, 100);
-
+$friendsBatch = array_chunk($mutualFriends, 100);
 foreach($friendsBatch as $batch) {
 	// Get friend details
 	$friendsDetails = $connection->get(
@@ -29,16 +42,14 @@ foreach($friendsBatch as $batch) {
 		)
 	);
 	
-	// Save select friend details
+	// Save friend details
 	foreach($friendsDetails as $friendDetails) {
-		if ($friendDetails->following === true) {
-			$friends[] = array(
-				'id' => 				$friendDetails->id,
-				'profile_image_url' =>	$friendDetails->profile_image_url,
-				'name' =>				$friendDetails->name,
-				'screen_name' =>		$friendDetails->screen_name
-			);
-		}
+		$friends[] = array(
+			'id' => 				$friendDetails->id,
+			'profile_image_url' =>	$friendDetails->profile_image_url,
+			'name' =>				$friendDetails->name,
+			'screen_name' =>		$friendDetails->screen_name
+		);
 	}
 }
 ?>
