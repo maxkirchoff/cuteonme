@@ -10,9 +10,11 @@ $connection = new TwitterOAuth(
 	$_SESSION['access_token']['oauth_token_secret']
 );
 
-// extract values from the session
-$apiKey = API_KEY;
+// extract values from the request and session
 $sharerUserId = $_SESSION['access_token']['user_id'];
+$pageNumber = $_REQUEST['page'];
+if (empty($pageNumber)) $pageNumber = 1;
+$nextPageNumber = $pageNumber + 1;
 
 // fetch original urls, users, and conversions from the awe.sm Stat API
 $originalUrlApiUrl = "http://api.awe.sm/stats/range.json?" .
@@ -23,7 +25,8 @@ $originalUrlApiUrl = "http://api.awe.sm/stats/range.json?" .
         "pivot=tag&" .
         "with_metadata=true&" .
         "with_conversions=true&" .
-        "sort_type=shared_at";
+        "sort_type=shared_at&" .
+        "page={$pageNumber}";
 error_log("Fetch original_urls Stats API URL is {$originalUrlApiUrl}");
 $ch = curl_init($originalUrlApiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -73,7 +76,7 @@ foreach ($results['groups'] as $originalUrlGroup)
 		}
 		else
 		{
-			$userResponse = '';
+			$userResponse = 'src="/static/img/qmark.png"';
 		}
 		
 		// add the user's data to the user storage 
@@ -186,6 +189,7 @@ foreach($friendsApiResults as $friendsApiResult) {
 ?>	
 <!-- Iterate End -->
 
+<div class="span-8"><p class="back"><a href="/?page=<?= $nextPageNumber ?>">Next Page</a></p></div>    
 <form action="share.php" method="get"><p class="right"><input type="submit" value="Ask For Advice" class="button" /></p></form>
 
 <?php
