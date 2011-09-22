@@ -10,57 +10,74 @@ $connection = new TwitterOAuth(
 	$_SESSION['access_token']['oauth_token_secret']
 );
 
-// extract values from request and session
-$apiKey = API_KEY;
+// extract values from the request and session
 $url = $_REQUEST['url'];
 $sharerUserId = $_SESSION['access_token']['user_id'];
 $sharerUsername = $_SESSION['access_token']['screen_name'];
 $sharerIconUrl = $_SESSION['access_token']['profile_image_url'];
 $friendUserIds = $_REQUEST['friends'];
 $message = $_REQUEST['message'];
+
+// set default values
 $channel = 'twitter-message';
 $tool = 'tHSSFr';
 
-// create awe.sm shares
+// create awe.sm shares using the awe.sm Create API
 $encodedUrl = urlencode($url);
 $encodedMessage = urlencode($message);
 $encodedSharerIconUrl = urlencode($sharerIconUrl);
-$awesmApiURL = "http://api.awe.sm/url/batch.json?v=3&key={$apiKey}" .
-	"&url={$encodedUrl}&channel={$channel}&tool={$tool}&user_id={$sharerUserId}" . 
-	"&notes={$encodedMessage}&user_id_username={$sharerUsername}&user_id_icon_url={$encodedSharerIconUrl}&";
+$createSharesApiUrl = "http://api.awe.sm/url/batch.json?" .
+        "v=3&" . 
+        "key=" . API_KEY . "&" .
+        "url={$encodedUrl}&" . 
+        "channel={$channel}&" . 
+        "tool={$tool}&" . 
+        "user_id={$sharerUserId}&" .
+        "user_id_username={$sharerUsername}&" .
+        "user_id_icon_url={$encodedSharerIconUrl}&" .  
+        "notes={$encodedMessage}&";
+// add all the friends to the URL
 foreach ($friendUserIds as $friendUserId)
 {
-	$awesmApiURL .= "tag[]={$friendUserId}&";
+	$createSharesApiUrl .= "tag[]={$friendUserId}&";
 }
-// echo "<br>url called is " .print_r($awesmApiURL, true) . "<br>";
-error_log("Create API call: {$awesmApiURL}");
-$ch = curl_init($awesmApiURL);
+error_log("Create awe.sm shares API URL is {$createSharesApiUrl}");
+$ch = curl_init($createSharesApiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
-
 $results = json_decode($response, true);
-$awesmUrls = $results['awesm_urls'];
-foreach ($awesmUrls as $awesmUrl)
+
+// iterate over the created awe.sm shares and send DMs to each friend
+foreach ($results['awesm_urls'] as $awesmUrlObject)
 {
-	$shareUrl = $awesmUrl['awesm_url'];
-	$dmUserId = $awesmUrl['tag'];
-	$message = $awesmUrl['notes'];
-	$awesmId = $awesmUrl['awesm_id'];
-	$text = "{$message} {$shareUrl}";
+    // extract values from the awe.sm share response
+	$awesmUrl = $awesmUrlObject['awesm_url'];
+	$dmUserId = $awesmUrlObject['tag'];
+	$message = $awesmUrlObject['notes'];
+	$awesmId = $awesmUrlObject['awesm_id'];
+	$text = "{$message} {$awesmUrl}";
+	
+	// send a DM using the Twitter API
 	$parameters = array('user_id' => $dmUserId, 'text' => $text);
 	$method = 'direct_messages/new';
-	$dm = $connection->post($method, $parameters);	
-	error_log("DM is " . print_r($dm, true));
-//	echo "<br> dm'd {$shareUrl} for user {$dmUserId}";
-
-	// call update endpoint
+	$dm = $connection->post($method, $parameters);
+	
+	// extract the values from the DM
 	$postId = $dm->id;
-	$sharedAt = date('Y-m-d\TH:i:s\Z');
-	$awesmApiURL = "http://api.awe.sm/url/update/{$awesmId}.json?v=3&key={$apiKey}&" .
-	   "channel={$channel}&tool={$tool}&service_postid={$postId}&" .
-	   "service_postid_shared_at={$sharedAt}";
-	error_log("Update API call: {$awesmApiURL}");
-    $ch = curl_init($awesmApiURL);
+	$sharedAt = urlencode($dm->created_at);
+	
+	// update the share with the DM's information using the awe.sm Create API
+	$updateShareApiUrl = "http://api.awe.sm/url/update/{$awesmId}.json?" . 
+	       "v=3&" . 
+	       "key=" . API_KEY . "&" .
+	       "channel={$channel}&" . 
+	       "tool={$tool}&" . 
+	       "service_postid={$postId}&" .
+	       "service_postid_shared_at={$sharedAt}&" .
+	       "service_postid_reach=1&" .
+	       "service_userid={$dmUserId}";
+	error_log("Update awe.sm share API URL is {$updateShareApiUrl}");
+    $ch = curl_init($updateShareApiUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
 }
