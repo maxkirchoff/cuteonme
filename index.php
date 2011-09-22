@@ -15,7 +15,7 @@ $apiKey = API_KEY;
 $sharerUserId = $_SESSION['access_token']['user_id'];
 
 // fetch original urls, users, and conversions from the awe.sm Stat API
-$originalUrlApiCall = "http://api.awe.sm/stats/range.json?" .
+$originalUrlApiUrl = "http://api.awe.sm/stats/range.json?" .
         "v=3&" .
         "key=" . API_KEY . "&" .
         "user_id={$sharerUserId}&" .
@@ -24,8 +24,8 @@ $originalUrlApiCall = "http://api.awe.sm/stats/range.json?" .
         "with_metadata=true&" .
         "with_conversions=true&" .
         "sort_type=shared_at";
-error_log("Fetch original_urls Stats API call is {$originalUrlApiCall}");
-$ch = curl_init($originalUrlApiCall);
+error_log("Fetch original_urls Stats API URL is {$originalUrlApiUrl}");
+$ch = curl_init($originalUrlApiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 $results = json_decode($response, true);
@@ -97,7 +97,7 @@ foreach ($results['groups'] as $originalUrlGroup)
     
 	// fetch the message that was shared with the url from the awe.sm Stats API
 	$encodedUrl = urlencode($url);
-    $messageApiCall = "http://api.awe.sm/stats/range.json?".
+    $messageApiUrl = "http://api.awe.sm/stats/range.json?".
             "v=3&" .
             "key=" . API_KEY . "&" .
             "user_id={$sharerUserId}&" .
@@ -105,8 +105,8 @@ foreach ($results['groups'] as $originalUrlGroup)
             "group_by=awesm_id&" .
             "with_metadata=true&" .
             "per_page=1"; 
-    error_log("Fetch the url message Stats API call is {$messageApiCall}");
-    $ch = curl_init($messageApiCall);
+    error_log("Fetch the url message Stats API URL is {$messageApiUrl}");
+    $ch = curl_init($messageApiUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     $results = json_decode($response, true);
