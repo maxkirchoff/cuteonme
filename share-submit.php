@@ -34,7 +34,8 @@ $createSharesApiUrl = "http://api.awe.sm/url/batch.json?" .
         "tool={$tool}&" . 
         "user_id={$sharerUserId}&" .
         "user_id_username={$sharerUsername}&" .
-        "user_id_icon_url={$encodedSharerIconUrl}&" .  
+        "user_id_icon_url={$encodedSharerIconUrl}&" .
+        "service_userid={$sharerUserId}&" .  
         "notes={$encodedMessage}&";
 // add all the friends to the URL
 foreach ($friendUserIds as $friendUserId)
@@ -75,7 +76,7 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 	       "service_postid={$postId}&" .
 	       "service_postid_shared_at={$sharedAt}&" .
 	       "service_postid_reach=1&" .
-	       "service_userid={$dmUserId}";
+	       "service_userid={$sharerUserId}";
 	error_log("Update awe.sm share API URL is {$updateShareApiUrl}");
     $ch = curl_init($updateShareApiUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
