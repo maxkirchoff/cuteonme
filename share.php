@@ -47,8 +47,9 @@ foreach($friendsBatch as $batch) {
 		$friends[] = array(
 			'id' => 				$friendDetails->id,
 			'profile_image_url' =>	$friendDetails->profile_image_url,
-			'name' =>				$friendDetails->name,
-			'screen_name' =>		$friendDetails->screen_name
+			'screen_name' =>		$friendDetails->screen_name,
+            'name' =>               strlen($friendDetails->name) > 12 ?
+                    substr($friendDetails->name, 0, 11) . "..." : $friendDetails->name
 		);
 	}
 }
@@ -76,12 +77,7 @@ foreach($friendsBatch as $batch) {
 			<label>
 				<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
 				<img src="<?= $friend['profile_image_url'] ?>" alt="" width="30" height="30" />
-				<span title="@<?= $friend['screen_name'] ?>"><?= 
-					(strlen($friend['name']) > 12)? 
-						substr($friend['name'], 0, 11)."…"
-					:
-						$friend['name']
-				?></span>
+				<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
 			</label>
 		</li>
 <?php
