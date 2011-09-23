@@ -4,6 +4,8 @@
  * The share page provides a form to share a URL with specific Twitter friends.
  * The Twitter API is called a few times, to fetch friends that you follow and 
  * you follow as well (aka mutual friends), as well as to fetch their user details.
+ * The data from the form is sent to the share-submit page which handles the 
+ * rest of the sharing logic.
  */
 
 $title = 'Is this cute on me?';

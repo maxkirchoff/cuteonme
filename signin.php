@@ -1,10 +1,10 @@
 <?php
 
 /**
- * The signin page asks a user to authenticate with twitter and grant 
- * the awe.sm CuteOn.Me twitter application access to send direct messages to 
- * the user's twitter friends.  The included header file checks if the user is
- * already signed in. 
+ * The signin page asks the user to authenticate with Twitter so that the 
+ * the awe.sm CuteOn.Me Twitter application can send direct messages to 
+ * the user's twitter friends.  The logic to do this is on the signin-redirect 
+ * page.  The included header file checks if the user is already signed in.
  */
 
 $unauthedAllowed = true;

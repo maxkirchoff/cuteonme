@@ -6,16 +6,17 @@
  * application access.  This page displays all the URLs you have shared with 
  * your friends as well as their responses.
  * 
- * The included header file confirms the user is logged in, otherwise you are
- * redirected back to the login page.  The awe.sm Stats API is called to fetch 
- * all of the urls you shared with your friends, what friends you shared with,
- * what their respones were, and url metadata. The response is traversed so that
- * responses can be calculated from conversion goals, data can be aggregated
- * in a smaller data array, and a list of Twitter friend user IDs can be collected.
- * Also, for each url shared an awe.sm Stats API is made to fetch the message 
- * that was passed to friends.  Using the list of Twitter friend user IDs, user
- * details are looked up.  Finally, the URLs collected are iterated over in html
- * to display the data collected in the dashboard's html.
+ * The included header file completes the OAuth flow, confirms the user is 
+ * logged in, or redirects new users back to the login page.  The awe.sm Stats API 
+ * is called to fetch all of the urls you shared with your friends, what friends 
+ * you shared with, what their respones were, and additional metadata about the url.  
+ * The API response is traversed so that each friend's action can be calculated 
+ * from their conversion goals, data can be aggregated in a smaller data array, 
+ * and a list of Twitter friend user IDs can be collected. Also, for each url 
+ * shared an awe.sm Stats API is made to fetch the message that was passed to 
+ * their friends.  Using the list of Twitter friend user IDs, user details are 
+ * looked up.  Finally, the URLs collected are iterated over in HTML to display 
+ * the data collected in the dashboard's HTML.
  */
 
 $title = 'Cute On Me Results';

@@ -7,13 +7,15 @@
  * The majority of page is an iframe displaying the URL the user shared. 
  * At the top of the page is the voting bar with the user's Twitter profile icon,
  * the message from the direct message, and a place for the friend to vote whether
- * they like or dislike the URL.  Selecting one or the other triggers a conversion
- * for that awe.sm URL so the friend's advice can be tracked.
+ * they like or dislike the URL.  Voting triggers a conversion for that awe.sm URL 
+ * so the friend's advice can be tracked.  This is accomplished by the widget
+ * javascript which is included in the HTML.
  */
 
 $unauthedAllowed = true;
 require('./config.php');
 
+// show a default piture if no icon URL exists
 if (empty($_REQUEST['sharer_icon_url']))
 {
 	$sharerIconUrl = 'http://geektyrant.com/storage/post-images-2011/the-lone-ranger_l.jpg';
@@ -39,6 +41,8 @@ else
 <div>
     <!--  Voting Bar  -->
 	<div class="container" id="voteScreen">
+	
+        <!--  Show the sharer's information and message  -->
 		<div class="span-2">
 			<img src="<?= $sharerIconUrl ?>" alt="" width="70" height="70" /> 
 		</div>
@@ -48,6 +52,8 @@ else
 				&quot;<?= $_REQUEST['message'] ?>&quot;
 			</p>
 		</div>
+		
+		<!--  Show voting options for the friend  -->
 		<div class="span-4 last right">
 			<p>
 				<input type="image" id="yes" value="Yes" onclick="voteYes()" src="/static/img/thumbs-up.png" width="70" height="70"/>
@@ -56,6 +62,7 @@ else
 		</div>
 	</div>
 	
+	<!--  Post-voting message  -->
 	<div class="container" id="thankScreen" style="display: none">
 		<div class="span-2">
 			<img src="<?= $sharerIconUrl ?>" alt="" width="70" height="70" /> 

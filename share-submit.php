@@ -1,13 +1,13 @@
 <?php
 
 /**
- * The share-submit take the data from the share page and calls the awe.sm 
+ * The share-submit page takes the data from the share page and calls the awe.sm 
  * Create API to create awe.sm URLs.  Each awe.sm URL contains information about 
  * your Twitter user ID, your friend's Twitter user ID, the message that belongs 
  * in the direct message, and more.  The awe.sm URLs are then sent via a direct
  * message to each friend using the awe.sm CuteOn.Me Twitter application.  Once,
- * a direct message has been posted, the awe.sm URL is updated information about 
- * the post, such as the post ID, and time the post occurred, and the number of
+ * a direct message has been posted, the awe.sm URL is updated with information 
+ * about the post such as the post ID, time the post occurred, and the number of
  * users that can receive the message (aka the reach).
  */
 

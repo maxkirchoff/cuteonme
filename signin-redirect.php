@@ -5,8 +5,9 @@
  * awe.sm CuteOn.Me Twitter application to send direct messages to your friends.
  * This code has been copied from the twitteroauth library (redirect.php) 
  * which is included as a submodule to this project. A connection is 
- * made to twitter and the user is redirected to a Twitter URL so they 
- * can authenticate and grant the application access.  
+ * made to Twitter and the user is redirected to a Twitter URL so they 
+ * can authenticate and grant the application access. On completion you will be
+ * redirected to the index page.
  */
 
 /* Start session and load library. */
