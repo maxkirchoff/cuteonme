@@ -25,7 +25,7 @@ Try it out at [http://CuteOn.Me](http://CuteOn.Me)
     cp -R cuteonme /var/www/
 
     # update the apache configuration
-    cp config/cuteonme /etc/apache2/sites-available/
+    cp cuteonme/setup/cuteonme-apache-config /etc/apache2/sites-available/cuteonme
     a2dissite default
     a2ensite cuteonme
     apache2ctl restart
