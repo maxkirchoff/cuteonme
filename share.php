@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * The share page provides a form to share a URL with specific Twitter friends.
+ * The Twitter API is called a few times, to fetch friends that you follow and 
+ * you follow as well (aka mutual friends), as well as to fetch their user details.
+ */
+
 $title = 'Is this cute on me?';
 require('./template/header.php');
 

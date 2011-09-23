@@ -1,16 +1,21 @@
 <?php
 
+/**
+ * The signin-redirect page is where we start the OAuth flow to enable the 
+ * awe.sm CuteOn.Me Twitter application to send direct messages to your friends.
+ * This code has been copied from the twitteroauth library (redirect.php) 
+ * which is included as a submodule to this project. A connection is 
+ * made to twitter and the user is redirected to a Twitter URL so they 
+ * can authenticate and grant the application access.  
+ */
+
 /* Start session and load library. */
 session_start();
 require_once('./config.php');
 require_once('./lib/twitteroauth/twitteroauth/twitteroauth.php');
 
 /* Build TwitterOAuth object with client credentials. */
-error_log(CONSUMER_KEY.', '.CONSUMER_SECRET);
-
 $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET);
-
-error_log(print_r($connection, true));
  
 /* Get temporary credentials. */
 $request_token = $connection->getRequestToken(OAUTH_CALLBACK);

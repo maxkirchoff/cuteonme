@@ -1,5 +1,18 @@
 <?php
+
+/**
+ * The opinion page is where a friend is redirected to after they click on a 
+ * CuteOn.Me awe.sm URL that was sent to the via a Twitter direct message.
+ * This page is run entirely by the values retreived from the query string.
+ * The majority of page is an iframe displaying the URL the user shared. 
+ * At the top of the page is the voting bar with the user's Twitter profile icon,
+ * the message from the direct message, and a place for the friend to vote whether
+ * they like or dislike the URL.  Selecting one or the other triggers a conversion
+ * for that awe.sm URL so the friend's advice can be tracked.
+ */
+
 $unauthedAllowed = true;
+require('./config.php');
 
 if (empty($_REQUEST['sharer_icon_url']))
 {
@@ -24,6 +37,7 @@ else
 <body>
 
 <div>
+    <!--  Voting Bar  -->
 	<div class="container" id="voteScreen">
 		<div class="span-2">
 			<img src="<?= $sharerIconUrl ?>" alt="" width="70" height="70" /> 
@@ -54,9 +68,11 @@ else
 	</div>
 </div>
 
+<!--  URL display   -->
 <iframe src="<?= $_REQUEST['url'] ?>" width="100%" height="89%" frameborder="0"></iframe>
 
-<script src="http://widgets.awe.sm/v3/widgets.js?key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743"></script>
+<!--  awe.sm Conversion Javascript  -->
+<script src="http://widgets.awe.sm/v3/widgets.js?key=<?= API_KEY ?>"></script>
 <script>
 function voteYes() {
 	AWESM.convert('goal_1',0);

@@ -1,4 +1,23 @@
 <?php
+
+/**
+ * This is the dashboard for the application.  You are redirected here once 
+ * you have authenticated with Twitter and granted the awe.sm CuteOn.Me Twitter
+ * application access.  This page displays all the URLs you have shared with 
+ * your friends as well as their responses.
+ * 
+ * The included header file confirms the user is logged in, otherwise you are
+ * redirected back to the login page.  The awe.sm Stats API is called to fetch 
+ * all of the urls you shared with your friends, what friends you shared with,
+ * what their respones were, and url metadata. The response is traversed so that
+ * responses can be calculated from conversion goals, data can be aggregated
+ * in a smaller data array, and a list of Twitter friend user IDs can be collected.
+ * Also, for each url shared an awe.sm Stats API is made to fetch the message 
+ * that was passed to friends.  Using the list of Twitter friend user IDs, user
+ * details are looked up.  Finally, the URLs collected are iterated over in html
+ * to display the data collected in the dashboard's html.
+ */
+
 $title = 'Cute On Me Results';
 require('./template/header.php');
 
