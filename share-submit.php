@@ -102,7 +102,8 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 <p>A direct message has been sent to your selected friends on Twitter.</p>
 <p>Return to <em>Cute On Me</em> to see the results.</p>
 
-<div class="right bottom"><a href="/index.php" class="button">Alrighty
-Then</a></div>
+<div class="right bottom">
+	<a href="/index.php" class="button">Alrighty Then</a>
+</div>
 
 <?php require('./template/footer.php'); ?>

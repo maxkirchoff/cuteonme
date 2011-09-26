@@ -196,7 +196,7 @@ foreach($friendsApiResults as $friendsApiResult)
 		</div>
 	</div>
 <?php }} else { ?>
-		<h3>You haven't asked any opinions yet.</h3>
+	<h3>You haven't asked any opinions yet.</h3>
 <?php } ?>
 <!-- Iterate End -->
 

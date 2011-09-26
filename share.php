@@ -80,14 +80,14 @@ foreach($friendsBatch as $batch)
 	<h3 class="bottomless">Select your trusted friends.</h3>
 	<p class="label">We&rsquo;ll send a custom message to each one</p>
 	<ul class="friends">
-	<?php foreach($friends as $friend) { ?>
-		<li class="friend"><label> <input type="checkbox" name="friends[]"
-			value="<?= $friend['id'] ?>" /> <img
-			src="<?= $friend['profile_image_url'] ?>" alt="" width="30"
-			height="30" /> 
-			<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
-		</label></li>
-	<?php } ?>
+		<?php foreach($friends as $friend) { ?>
+			<li class="friend"><label> <input type="checkbox" name="friends[]"
+				value="<?= $friend['id'] ?>" /> <img
+				src="<?= $friend['profile_image_url'] ?>" alt="" width="30"
+				height="30" /> 
+				<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
+			</label></li>
+		<?php } ?>
 	</ul>
 	
 	<div class="span-16 clearfix">
