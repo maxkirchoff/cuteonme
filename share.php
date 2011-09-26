@@ -2,9 +2,9 @@
 
 /**
  * The share page provides a form to share a URL with specific Twitter friends.
- * The Twitter API is called a few times, to fetch friends that you follow and 
+ * The Twitter API is called a few times, to fetch friends that you follow and
  * you follow as well (aka mutual friends), as well as to fetch their user details.
- * The data from the form is sent to the share-submit page which handles the 
+ * The data from the form is sent to the share-submit page which handles the
  * rest of the sharing logic.
  */
 
@@ -13,52 +13,50 @@ require('./template/header.php');
 
 // Setup Twitter Connection
 $connection = new TwitterOAuth(
-    CONSUMER_KEY, 
-    CONSUMER_SECRET, 
-    $_SESSION['access_token']['oauth_token'], 
-    $_SESSION['access_token']['oauth_token_secret']);
+	CONSUMER_KEY,
+	CONSUMER_SECRET,
+	$_SESSION['access_token']['oauth_token'],
+	$_SESSION['access_token']['oauth_token_secret']
+);
 
 // Get list of friends
 $friends = array();
 
 // Get the signed in user's Twitter friends IDs
 $friendsIds = $connection->get(
-	'friends/ids',
-	array (
-		'user_id'	=> $_SESSION['access_token']['user_id']
-	)
+		'friends/ids',
+		array ('user_id' => $_SESSION['access_token']['user_id'])
 );
 
 // Get the signed in user's Twitter followers IDs
 $follwersIds = $connection->get(
-    'followers/ids',
-    array (
-        'user_id'   => $_SESSION['access_token']['user_id']
-    )
+		'followers/ids',
+		array ('user_id' => $_SESSION['access_token']['user_id'])
 );
 
-// create the users that are followers and friends
+// Create the users that are followers and friends
 $mutualFriends = array_intersect($friendsIds, $follwersIds);
 
-// Now, find the information about those friends in a batched manner.
+// Find the information about those friends in a batched manner.
 $friendsBatch = array_chunk($mutualFriends, 100);
-foreach($friendsBatch as $batch) {
+foreach($friendsBatch as $batch) 
+{
 	// Get friend details
 	$friendsDetails = $connection->get(
-		'users/lookup',
-		array(
-			'user_id' => implode(',', $batch)
-		)
+			'users/lookup',
+			array('user_id' => implode(',', $batch))
 	);
-	
+
 	// Save friend details
-	foreach($friendsDetails as $friendDetails) {
+	foreach($friendsDetails as $friendDetails) 
+	{
+		$friendName = strlen($friendDetails->name) > 12 ?
+				substr($friendDetails->name, 0, 11) . "..." : $friendDetails->name;
 		$friends[] = array(
-			'id' => 				$friendDetails->id,
-			'profile_image_url' =>	$friendDetails->profile_image_url,
-			'screen_name' =>		$friendDetails->screen_name,
-            'name' =>               strlen($friendDetails->name) > 12 ?
-                    substr($friendDetails->name, 0, 11) . "..." : $friendDetails->name
+				'id' => $friendDetails->id,
+				'profile_image_url' => $friendDetails->profile_image_url,
+				'screen_name' => $friendDetails->screen_name,
+				'name' => $friendName
 		);
 	}
 }
@@ -70,36 +68,35 @@ foreach($friendsBatch as $batch) {
 <form action="share-submit.php" method="post">
 	<h3 class="bottomless">Link</h3>
 	<p class="label">Paste the page where your friends can check it out</p>
-	<p><input type="text" name="url" class="text" placeholder="http://amazon.com/item123"/></p>
+	<p><input type="text" name="url" class="text"
+		placeholder="http://amazon.com/item123" /></p>
 	
 	<h3 class="bottomless">Message</h3>
 	<p class="label">One sentence &mdash; this has to fit in a Twitter message</p>
-	<p><textarea name="message" maxlength="120">Do you think this would be cute on me? Real quick: </textarea></p>
-
+	<p><textarea name="message" maxlength="120">
+		Do you think this would be cute on me? Real quick: </textarea>
+	</p>
+	
 	<h3 class="bottomless">Select your trusted friends.</h3>
 	<p class="label">We&rsquo;ll send a custom message to each one</p>
 	<ul class="friends">
-<?php
-	foreach($friends as $friend) {
-?>
-		<li class="friend">
-			<label>
-				<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
-				<img src="<?= $friend['profile_image_url'] ?>" alt="" width="30" height="30" />
-				<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
-			</label>
-		</li>
-<?php
-	}
-?>					
+	<?php foreach($friends as $friend) { ?>
+		<li class="friend"><label> <input type="checkbox" name="friends[]"
+			value="<?= $friend['id'] ?>" /> <img
+			src="<?= $friend['profile_image_url'] ?>" alt="" width="30"
+			height="30" /> 
+			<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
+		</label></li>
+	<?php } ?>
 	</ul>
 	
 	<div class="span-16 clearfix">
-		<div class="span-8"><p class="back"><a href="/">Never Mind</a></p></div>
-		<div class="span-8 last right"><input type="submit" value="Ask For Advice" class="button" /></div>
+	<div class="span-8">
+		<p class="back"><a href="/">Never Mind</a></p>
+	</div>
+	<div class="span-8 last right"><input type="submit"
+		value="Ask For Advice" class="button" /></div>
 	</div>
 </form>
 
-<?php
-require('./template/footer.php');	
-?>
+<?php require('./template/footer.php'); ?>

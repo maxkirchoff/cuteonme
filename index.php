@@ -1,95 +1,95 @@
 <?php
 
 /**
- * This is the dashboard for the application.  You are redirected here once 
+ * This is the dashboard for the application.  You are redirected here once
  * you have authenticated with Twitter and granted the awe.sm CuteOn.Me Twitter
- * application access.  This page displays all the URLs you have shared with 
+ * application access.  This page displays all the URLs you have shared with
  * your friends as well as their responses.
- * 
- * The included header file completes the OAuth flow, confirms the user is 
- * logged in, or redirects new users back to the login page.  The awe.sm Stats API 
- * is called to fetch all of the urls you shared with your friends, what friends 
- * you shared with, what their respones were, and additional metadata about the url.  
- * The API response is traversed so that each friend's action can be calculated 
- * from their conversion goals, data can be aggregated in a smaller data array, 
- * and a list of Twitter friend user IDs can be collected. Also, for each url 
- * shared an awe.sm Stats API is made to fetch the message that was passed to 
- * their friends.  Using the list of Twitter friend user IDs, user details are 
- * looked up.  Finally, the URLs collected are iterated over in HTML to display 
+ *
+ * The included header file completes the OAuth flow, confirms the user is
+ * logged in, or redirects new users back to the login page.  The awe.sm Stats API
+ * is called to fetch all of the urls you shared with your friends, what friends
+ * you shared with, what their respones were, and additional metadata about the url.
+ * The API response is traversed so that each friend's action can be calculated
+ * from their conversion goals, data can be aggregated in a smaller data array,
+ * and a list of Twitter friend user IDs can be collected. Also, for each url
+ * shared an awe.sm Stats API is made to fetch the message that was passed to
+ * their friends.  Using the list of Twitter friend user IDs, user details are
+ * looked up.  Finally, the URLs collected are iterated over in HTML to display
  * the data collected in the dashboard's HTML.
  */
 
 $title = 'Cute On Me Results';
 require('./template/header.php');
 
-// build oauth object
+// Build OAuth object
 $connection = new TwitterOAuth(
-	CONSUMER_KEY,
-	CONSUMER_SECRET,
-	$_SESSION['access_token']['oauth_token'],
-	$_SESSION['access_token']['oauth_token_secret']
+		CONSUMER_KEY,
+		CONSUMER_SECRET,
+		$_SESSION['access_token']['oauth_token'],
+		$_SESSION['access_token']['oauth_token_secret']
 );
 
-// extract values from the request and session
+// Extract values from the request and session
 $sharerUserId = $_SESSION['access_token']['user_id'];
 $pageNumber = $_REQUEST['page'];
 if (empty($pageNumber)) $pageNumber = 1;
 $nextPageNumber = $pageNumber + 1;
 
-// fetch original urls, users, and conversions from the awe.sm Stat API
+// Fetch original URLs, users, and conversions from the awe.sm Stat API
 $originalUrlApiUrl = "http://api.awe.sm/stats/range.json?" .
-        "v=3&" .
-        "key=" . API_KEY . "&" .
-        "user_id={$sharerUserId}&" .
-        "group_by=original_url&" . 
-        "pivot=tag&" .
-        "with_metadata=true&" .
-        "with_conversions=true&" .
-        "sort_type=shared_at&" .
-        "page={$pageNumber}";
+		"v=3&" .
+		"key=" . API_KEY . "&" .
+		"user_id={$sharerUserId}&" .
+		"group_by=original_url&" . 
+		"pivot=tag&" .
+		"with_metadata=true&" .
+		"with_conversions=true&" .
+		"sort_type=shared_at&" .
+		"page={$pageNumber}";
 error_log("Fetch original_urls Stats API URL is {$originalUrlApiUrl}");
 $ch = curl_init($originalUrlApiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 $results = json_decode($response, true);
 
-// create a place to store url data
+// Create a place to store url data
 $urlData = array();
 
-// create a list of all the twitter user_ids
+// Create a list of all the twitter user_ids
 $userIdList = array();
 
-// iterate over the urls found
+// Iterate over the URLs found
 foreach ($results['groups'] as $originalUrlGroup)
 {
-    // extract the url 
-    $url = $originalUrlGroup['original_url'];
-      
-    // extract url metadata
-    $urlTitle = $originalUrlGroup['metadata']['title'];
-    if (empty($urlTitle)) $urlTitle = $url;
-    $urlIconUrl = $originalUrlGroup['metadata']['icon_url'];
-    
-    // create a place to store user data
-    $users = array();
+	// Extract the URL
+	$url = $originalUrlGroup['original_url'];
 
-    // iterate over the users 
-    $positiveResponses = 0;
-    $negativeResponses = 0;
+	// Extract URL metadata
+	$urlTitle = $originalUrlGroup['metadata']['title'];
+	if (empty($urlTitle)) $urlTitle = $url;
+	$urlIconUrl = $originalUrlGroup['metadata']['icon_url'];
+
+	// Create a place to store user data
+	$users = array();
+
+	// Iterate over the users
+	$positiveResponses = 0;
+	$negativeResponses = 0;
 	foreach ($originalUrlGroup['pivots'] as $tagGroup)
-	{
-	    
-	    // extract the user_id
-	    $userId = $tagGroup['tag'];
-	    
-	    // calculate whether the user responsed positively or negatively
-	    // goal_1 is positive, goal_2 is negative 
+	{  
+		// Extract the user_id
+		$userId = $tagGroup['tag'];
+	  
+		// Calculate whether the user responsed positively or negatively
+		// goal_1 is positive
+		// goal_2 is negative
 		if ($tagGroup['conversions']['goal_1']['count'] > 0)
 		{
 			$userResponse = 'src="/static/img/thumbs-up.png"';
 			$positiveResponses++;
 		}
-		elseif ($tagGroup['conversions']['goal_2']['count'] > 0) 
+		elseif ($tagGroup['conversions']['goal_2']['count'] > 0)
 		{
 			$userResponse = 'src="/static/img/thumbs-down.png"';
 			$negativeResponses++;
@@ -98,68 +98,69 @@ foreach ($results['groups'] as $originalUrlGroup)
 		{
 			$userResponse = 'src="/static/img/qmark.png"';
 		}
-		
-		// add the user's data to the user storage 
+
+		// Add the user's data to the user storage
 		$users[] = array(
 				'user_id' => $userId,
-				'response' => $userResponse);
-		
-		// add a user_id to the list
-        $userIdList[] = $userId;
+				'response' => $userResponse
+		);
+
+		// Add a user_id to the list
+		$userIdList[] = $userId;
 	}
 
-	// calculate the percentage of positive/negative responses across 
-	// all users for a url
+	// Calculate the percentage of positive/negative responses across all users 
+	// for a URL
 	$percentPositive = 0;
-    $percentNegative = 0;
+	$percentNegative = 0;
 	if (count($users) > 0 )
 	{
-	   $percentPositive = round(($positiveResponses * 100) / count($users));
-	   $percentNegative = round(($negativeResponses * 100) / count($users));
+		$percentPositive = round(($positiveResponses * 100) / count($users));
+		$percentNegative = round(($negativeResponses * 100) / count($users));
 	}
-    
-	// fetch the message that was shared with the url from the awe.sm Stats API
+
+	// Fetch the message that was shared with the URL from the awe.sm Stats API
 	$encodedUrl = urlencode($url);
-    $messageApiUrl = "http://api.awe.sm/stats/range.json?".
-            "v=3&" .
-            "key=" . API_KEY . "&" .
-            "user_id={$sharerUserId}&" .
-            "original_url={$encodedUrl}&" .
-            "group_by=awesm_id&" .
-            "with_metadata=true&" .
-            "per_page=1"; 
-    error_log("Fetch the url message Stats API URL is {$messageApiUrl}");
-    $ch = curl_init($messageApiUrl);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    $results = json_decode($response, true);
-    
-    // extract the message
-    $message = $results['groups'][0]['metadata']['notes'];
-	
-    // add all the data extracted and calculated to the url storage
+	$messageApiUrl = "http://api.awe.sm/stats/range.json?".
+			"v=3&" .
+			"key=" . API_KEY . "&" .
+			"user_id={$sharerUserId}&" .
+			"original_url={$encodedUrl}&" .
+			"group_by=awesm_id&" .
+			"with_metadata=true&" .
+			"per_page=1"; 
+	error_log("Fetch the url message Stats API URL is {$messageApiUrl}");
+	$ch = curl_init($messageApiUrl);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$response = curl_exec($ch);
+	$results = json_decode($response, true);
+
+	// Extract the message
+	$message = $results['groups'][0]['metadata']['notes'];
+
+	// Add all the data extracted and calculated to the URL storage
 	$urlData[] = array(
 			'url' => $url,
 			'users' => $users,
 			'percent_positive' => $percentPositive,
 			'percent_negative' => $percentNegative,
-            'message' => $message,
-	        'title' => $urlTitle,
-	        'icon_url' => $urlIconUrl);
-} 
+			'message' => $message,
+			'title' => $urlTitle,
+			'icon_url' => $urlIconUrl
+	);
+}
 //error_log("All the extracted data url data is: " . print_r($urlData, true));
 
-// fetch twitter user information from the Twitter API
+// Fetch Twitter user information from the Twitter API
 $friendsApiResults = $connection->get(
-	'users/lookup',
-	array(
-		'user_id' => implode(',', array_unique($userIdList))
-	)
+		'users/lookup',
+		array('user_id' => implode(',', array_unique($userIdList)))
 );
 
-// arrange twitter user data in an associative array for easy lookups
+// Arrange Twitter user data in an associative array for easy lookups
 $friendsData = array();
-foreach($friendsApiResults as $friendsApiResult) {
+foreach($friendsApiResults as $friendsApiResult) 
+{
 	$friendsData[$friendsApiResult->id] = array(
 			'id' => $friendsApiResult->id,
 			'profile_image_url' => $friendsApiResult->profile_image_url,
@@ -176,42 +177,34 @@ foreach($friendsApiResults as $friendsApiResult) {
 <h2>Your Results</h2>
 
 <!-- Iterate over urls -->
-<?php
-		foreach($urlData as $url) {
-?>
-<div class="span-16 clearfix result">
-	<div class="span-10">
-		<h3><a href="<?= $url['url'] ?>"><?=$url['title'] ?></a></h3>
-		<p><?= $url['message'] ?></p>
-		<?php foreach($url['users'] as $user){ ?>
-			<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>" 
-			     alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?> 
-			   <img <?= $user['response'] ?> alt="cute" width="30" height="30" />
-		    </p>
-		<?php } ?>
+<?php foreach($urlData as $url) { ?>
+	<div class="span-16 clearfix result">
+		<div class="span-10">
+			<h3><a href="<?= $url['url'] ?>"><?=$url['title'] ?></a></h3>
+			<p><?= $url['message'] ?></p>
+			<?php foreach($url['users'] as $user){ ?>
+				<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
+					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?>
+				<img <?= $user['response'] ?> alt="cute" width="30" height="30" /></p>
+			<?php } ?>
+		</div>
+		<div class="span-6 last">
+			<p class="right"><img src="/static/img/thumbs-up.png" alt="cute"
+				width="30" height="30" /> <?= $url['percent_positive'] ?>% <img
+				src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" />
+			<?= $url['percent_negative'] ?>%</p>
+		</div>
 	</div>
-	<div class="span-6 last">
-		<p class="right">
-			<img src="/static/img/thumbs-up.png" alt="cute" width="30" height="30" /> 
-			<?= $url['percent_positive'] ?>%
-			<img src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" /> 
-			<?= $url['percent_negative'] ?>%
-		</p>
-	</div>
-</div>
-<?php
-		}
-	} else {
-?>
-<h3>You haven't asked any opinions yet.</h3>
-<?php		
-	}
-?>	
+<?php }} else { ?>
+		<h3>You haven't asked any opinions yet.</h3>
+<?php } ?>
 <!-- Iterate End -->
 
-<div class="span-8"><p class="back"><a href="/?page=<?= $nextPageNumber ?>">Next Page</a></p></div>    
-<form action="share.php" method="get"><p class="right"><input type="submit" value="Ask For Advice" class="button" /></p></form>
+<div class="span-8">
+	<p class="back"><a href="/?page=<?= $nextPageNumber ?>">Next Page</a></p>
+</div>
+<form action="share.php" method="get">
+	<p class="right"><input type="submit" value="Ask For Advice" class="button" /></p>
+</form>
 
-<?php
-require('./template/footer.php');	
-?>
+<?php require('./template/footer.php'); ?>
