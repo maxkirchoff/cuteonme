@@ -3,6 +3,8 @@ A simple web application that uses the awe.sm APIs to get quick advice from your
 
 Try it out at [http://CuteOn.Me](http://CuteOn.Me)
 
+Read more about [how it works](docs/how-it-works.markdown)
+
 ## Setup
 
 ### Requirements
@@ -35,7 +37,7 @@ Try it out at [http://CuteOn.Me](http://CuteOn.Me)
       add: 127.0.0.1    www.cuteon.me
 
     # test your installation
-    curl http://localhost/test-install.php
+    curl http://localhost/static/html/test-install.php
     # response should be: "Installation successful!"
 
     # try out the app 
