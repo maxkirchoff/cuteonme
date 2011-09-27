@@ -59,7 +59,7 @@ vi /etc/hosts
 Test your installation
 
 <code>
-curl http://localhost/static/html/test-install.php
+curl http://www.cuteon.me/static/html/test-install.html
 
 \# response should be: "Installation successful!"
 </code>
