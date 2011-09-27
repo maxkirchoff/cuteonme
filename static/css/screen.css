@@ -26,8 +26,7 @@ th {
 td {
 	padding-bottom: .5em;
 }
-blockquote:before, blockquote:after, q:before, q:after {content:'';}
-blockquote, q {quotes:"" "";}
+
 a img {border:none;}
 :focus {outline:0;}
 
@@ -48,7 +47,7 @@ p .left {margin:1.5em 1.5em 1.5em 0;padding:0;}
 p .right {margin:1.5em 0 1.5em 1.5em;padding:0;}
 a:focus, a:hover {color:#09f;}
 a {color:#06c;text-decoration:underline;}
-blockquote {margin:1.5em;color:#666;font-style:italic;}
+blockquote {margin-bottom:1.5em;color:#666;font-style:italic;}
 strong, dfn {font-weight:bold;}
 em, dfn {font-style:italic;}
 sup, sub {line-height:0;}
@@ -367,7 +366,7 @@ h2 {
 	margin-bottom: .3em;
 }
 
-.button {
+.button, .buttonMinor {
 	color: #fff;
 	background-color: #ea7f66;
 	border: 2px solid #ffa86e;
@@ -384,9 +383,15 @@ h2 {
 	text-decoration: none;
 	vertical-align: middle;
 }
-	.button:hover {
+	.button:hover, .buttonMinor:hover {
 		color: #fff;
 	}
+
+.buttonMinor {
+	color: #fff;
+	background-color: #d88c78;
+	border: 2px solid #e8ad80;
+}
 
 .back {
 	margin: 1.5em 1em;

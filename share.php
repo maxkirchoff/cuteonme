@@ -93,7 +93,7 @@ foreach($friendsBatch as $batch)
 	
 	<div class="span-16 clearfix">
 	<div class="span-8">
-		<p class="back"><a href="/">Never Mind</a></p>
+		<a href="/" class="buttonMinor">Never Mind</a>
 	</div>
 	<div class="span-8 last right"><input type="submit"
 		value="Ask For Advice" class="button" /></div>

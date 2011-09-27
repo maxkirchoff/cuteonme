@@ -172,6 +172,15 @@ foreach($friendsApiResults as $friendsApiResult)
 
 <h1>Cute On Me?</h1>
 
+<div class="span-16 clearfix">
+	<div class="span-8">
+		<a href="signout.php" class="buttonMinor">Sign Out</a>
+	</div>
+	<div class="span-8 last right">
+		<a href="share.php" class="button">Ask for Advice</a>
+	</div>
+</div>
+	
 <?php if (!empty($urlData)) {?>
 
 <h2>Your Results</h2>
@@ -180,8 +189,10 @@ foreach($friendsApiResults as $friendsApiResult)
 <?php foreach($urlData as $url) { ?>
 	<div class="span-16 clearfix result">
 		<div class="span-10">
-			<h3><a href="<?= $url['url'] ?>"><?=$url['title'] ?></a></h3>
-			<p><?= $url['message'] ?></p>
+			<h3><a href="<?= $url['url'] ?>">
+				<?= strlen($url['title']) > 30 ? substr($url['title'], 0, 30) . "..." : $url['title']; ?>
+			</a></h3>
+			<blockquote>&ldquo;<?= $url['message'] ?>&rdquo;</blockquote>
 			<?php foreach($url['users'] as $user){ ?>
 				<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
 					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?>
@@ -200,11 +211,8 @@ foreach($friendsApiResults as $friendsApiResult)
 <?php } ?>
 <!-- Iterate End -->
 
-<div class="span-8">
-	<p class="back"><a href="/?page=<?= $nextPageNumber ?>">Next Page</a></p>
-</div>
-<form action="share.php" method="get">
-	<p class="right"><input type="submit" value="Ask For Advice" class="button" /></p>
-</form>
+<!-- Pagination -->
+<p class="back"><a href="/?page=<?= $nextPageNumber ?>">Next Page</a></p>
+
 
 <?php require('./template/footer.php'); ?>
