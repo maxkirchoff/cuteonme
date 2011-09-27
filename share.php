@@ -56,7 +56,8 @@ foreach($friendsBatch as $batch)
 				'id' => $friendDetails->id,
 				'profile_image_url' => $friendDetails->profile_image_url,
 				'screen_name' => $friendDetails->screen_name,
-				'name' => $friendName
+				'name' => $friendDetails->name,
+				'display_name' => $friendName
 		);
 	}
 }
@@ -73,19 +74,19 @@ foreach($friendsBatch as $batch)
 	
 	<h3 class="bottomless">Message</h3>
 	<p class="label">One sentence &mdash; this has to fit in a Twitter message</p>
-	<p><textarea name="message" maxlength="120">
-		Do you think this would be cute on me? Real quick: </textarea>
-	</p>
+	<p><textarea name="message" maxlength="120">Do you think this would be cute on me? Real quick: </textarea></p>
 	
 	<h3 class="bottomless">Select your trusted friends.</h3>
-	<p class="label">We&rsquo;ll send a custom message to each one</p>
+	<p class="label clearfix">We&rsquo;ll send a custom message to each one
+		<input type="search" id="friendSearch" placeholder="Search for a friend" />
+	</p>
+	
 	<ul class="friends">
 		<?php foreach($friends as $friend) { ?>
-			<li class="friend"><label> <input type="checkbox" name="friends[]"
-				value="<?= $friend['id'] ?>" /> <img
-				src="<?= $friend['profile_image_url'] ?>" alt="" width="30"
-				height="30" /> 
-				<span title="@<?= $friend['screen_name'] ?>"><?= $friend['name'] ?></span>
+			<li class="friend" data-name="@<?= htmlspecialchars(strtolower($friend['screen_name'].' '.$friend['name'])) ?>"><label>
+				<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
+				<img src="<?= $friend['profile_image_url'] ?>" alt="" width="30" height="30" /> 
+				<span title="@<?= $friend['screen_name'] ?>"><?= $friend['display_name'] ?></span>
 			</label></li>
 		<?php } ?>
 	</ul>
@@ -98,5 +99,40 @@ foreach($friendsBatch as $batch)
 		value="Ask For Advice" class="button" /></div>
 	</div>
 </form>
+
+<script type="text/javascript">
+// Disable enter/return key
+$('#friendSearch').keypress(function(e) {
+	if (e.which == 13) {
+		e.preventDefault();
+	}
+});
+
+// Perform search
+$('#friendSearch').keyup(function(e) {
+	if (e.target.value) {
+		// Hide all friends
+		$('.friend').addClass('hidden');
+		
+		// Show matching friends
+		$('li[data-name*="' + e.target.value.toLowerCase() + '"]').removeClass('hidden');
+	
+	} else {
+	
+		// Show all friends
+		$('.friend').removeClass('hidden');
+	}
+});
+
+$('input[type="checkbox"]').change(function(e) {
+	// Change containing <li> style to indicate selection
+	if (e.target.checked) {
+		$(this).parent().parent().addClass('friendSelected');
+	} else {
+		$(this).parent().parent().removeClass('friendSelected');
+	}
+});
+
+</script>
 
 <?php require('./template/footer.php'); ?>

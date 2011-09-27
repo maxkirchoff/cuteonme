@@ -1,17 +1,12 @@
+/* Import fonts */
 @import url(http://fonts.googleapis.com/css?family=Merienda+One);
 @import url(http://fonts.googleapis.com/css?family=Podkova);
 
 /* -----------------------------------------------------------------------
-
-
  Blueprint CSS Framework 1.0.1
  http://blueprintcss.org
-
-   * Copyright (c) 2007-Present. See LICENSE for more info.
-   * See README for instructions on how to use Blueprint.
-   * For credits and origins, see AUTHORS.
-   * This is a compressed file. See the sources in the 'src' directory.
-
+ Copyright (c) 2007-Present. See LICENSE for more info.
+ Modified for CuteOn.Me
 ----------------------------------------------------------------------- */
 
 /* reset.css */
@@ -260,7 +255,7 @@ hr.space {background:#fff;color:#fff;visibility:hidden;}
 .clearfix, .container {display:block;}
 .clear {clear:both;}
 
-
+/* End Blueprint. Begin CuteOn.Me styles */
 html {
 	height: 100%;
 }
@@ -301,28 +296,28 @@ h1 {
 	padding-top: .25em;
 	text-shadow: 1px 1px 3px #b15a7e;
 }
+
 h2 {
 	text-align: center;
 }
-h2 span {
-	border: 1px solid #84435e;
-	border-left: none;
-	border-right: none;
-	padding: .2em .5em;
-	display: inline-block;
-}
+	h2 span {
+		border: 1px solid #84435e;
+		border-left: none;
+		border-right: none;
+		padding: .2em .5em;
+		display: inline-block;
+	}
 
 .center {
 	text-align: center;
 }
 
-
 .friends {
 	list-style: none;
 	padding: 5px;
-	background-color: #fff3eb;
+	background-color: #f6f6f6;
 	height: 146px;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .friend {
@@ -333,16 +328,36 @@ h2 span {
 	padding: 0;
 	width: 30%;
 	font-family: sans-serif;
-	border: 1px solid #ffa86e;
+	border: 1px solid #d8d8d8;
 }
-.friend label {
-	display: block;
-	width: 100%;
+	.friend label {
+		display: block;
+		width: 100%;
+	}
+	.friend input {
+ 		display: none;
+	}
+
+.friendSelected {
+	border-color: #ffa86e;
+	background-color: #fff3eb;
 }
 
+#friendSearch {
+	display: inline-block;
+	float: right;
+	width: 180px;
+}
+
+.bottom {
+	padding-bottom: 3em;
+}
 .bottomless {
 	margin-bottom: 0;
 	padding-bottom: 0;
+}
+.hidden {
+	display: none;
 }
 
 .label {
@@ -369,16 +384,15 @@ h2 span {
 	text-decoration: none;
 	vertical-align: middle;
 }
-.button:hover {
-	color: #fff;
-}
+	.button:hover {
+		color: #fff;
+	}
 
 .back {
 	margin: 1.5em 1em;
 	font-size: .8em;
 	line-height: 1.5em;
 }
-
 
 .footer {
 	font-size: .7em;
@@ -387,10 +401,6 @@ h2 span {
 	background-repeat: no-repeat;
 	background-position: center right;
 	line-height: 32px;
-}
-
-.bottom {
-	padding-bottom: 3em;
 }
 
 .result {
