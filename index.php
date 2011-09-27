@@ -32,9 +32,15 @@ $connection = new TwitterOAuth(
 
 // Extract values from the request and session
 $sharerUserId = $_SESSION['access_token']['user_id'];
-$pageNumber = $_REQUEST['page'];
-if (empty($pageNumber)) $pageNumber = 1;
-$nextPageNumber = $pageNumber + 1;
+
+// Initial pagination setup
+if (empty($_REQUEST['page'])) {
+	$pageNumber = 1;
+	$previousPageNumber = 0;
+} else {
+	$pageNumber = $_REQUEST['page'];
+	$previousPageNumber = $pageNumber - 1;
+}
 
 // Fetch original URLs, users, and conversions from the awe.sm Stat API
 $originalUrlApiUrl = "http://api.awe.sm/stats/range.json?" .
@@ -52,6 +58,15 @@ $ch = curl_init($originalUrlApiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 $results = json_decode($response, true);
+
+// Finish setting up pagination
+if ($results['last_offset'] == $results['total_results']) {
+	// There are no more results
+	$nextPageNumber = 0;
+} else {
+	// There are more results
+	$nextPageNumber = $pageNumber + 1;
+}
 
 // Create a place to store url data
 $urlData = array();
@@ -194,9 +209,11 @@ foreach($friendsApiResults as $friendsApiResult)
 			</a></h3>
 			<blockquote>&ldquo;<?= $url['message'] ?>&rdquo;</blockquote>
 			<?php foreach($url['users'] as $user){ ?>
-				<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
+				<p>
+					<img <?= $user['response'] ?> alt="cute" width="30" height="30" />
+					<img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
 					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?>
-				<img <?= $user['response'] ?> alt="cute" width="30" height="30" /></p>
+				</p>
 			<?php } ?>
 		</div>
 		<div class="span-6 last">
@@ -212,7 +229,15 @@ foreach($friendsApiResults as $friendsApiResult)
 <!-- Iterate End -->
 
 <!-- Pagination -->
-<p class="back"><a href="/?page=<?= $nextPageNumber ?>">Next Page</a></p>
+<p class="right small">
+<?php if ($previousPageNumber != 0): ?>
+	<a href="/?page=<?= $previousPageNumber ?>">&laquo; Newer</a>
+<?php endif; ?>
+	Page <?= $pageNumber ?>
+<?php if ($nextPageNumber != 0): ?>
+	<a href="/?page=<?= $nextPageNumber ?>">Older &raquo;</a>
+<?php endif; ?>
+</p>
 
 
 <?php require('./template/footer.php'); ?>
