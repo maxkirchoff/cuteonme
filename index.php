@@ -32,9 +32,15 @@ $connection = new TwitterOAuth(
 
 // Extract values from the request and session
 $sharerUserId = $_SESSION['access_token']['user_id'];
-$pageNumber = $_REQUEST['page'];
-if (empty($pageNumber)) $pageNumber = 1;
-$nextPageNumber = $pageNumber + 1;
+
+// Initial pagination setup
+if (empty($_REQUEST['page'])) {
+	$pageNumber = 1;
+	$previousPageNumber = 0;
+} else {
+	$pageNumber = $_REQUEST['page'];
+	$previousPageNumber = $pageNumber - 1;
+}
 
 // Fetch original URLs, users, and conversions from the awe.sm Stat API
 $originalUrlApiUrl = "http://api.awe.sm/stats/range.json?" .
@@ -52,6 +58,15 @@ $ch = curl_init($originalUrlApiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 $results = json_decode($response, true);
+
+// Finish setting up pagination
+if ($results['last_offset'] == $results['total_results']) {
+	// There are no more results
+	$nextPageNumber = 0;
+} else {
+	// There are more results
+	$nextPageNumber = $pageNumber + 1;
+}
 
 // Create a place to store url data
 $urlData = array();
@@ -86,17 +101,17 @@ foreach ($results['groups'] as $originalUrlGroup)
 		// goal_2 is negative
 		if ($tagGroup['conversions']['goal_1']['count'] > 0)
 		{
-			$userResponse = 'src="/static/img/thumbs-up.png"';
+			$userResponse = 'positive';
 			$positiveResponses++;
 		}
 		elseif ($tagGroup['conversions']['goal_2']['count'] > 0)
 		{
-			$userResponse = 'src="/static/img/thumbs-down.png"';
+			$userResponse = 'negative';
 			$negativeResponses++;
 		}
 		else
 		{
-			$userResponse = 'src="/static/img/qmark.png"';
+			$userResponse = 'unknown';
 		}
 
 		// Add the user's data to the user storage
@@ -172,6 +187,15 @@ foreach($friendsApiResults as $friendsApiResult)
 
 <h1>Cute On Me?</h1>
 
+<div class="span-16 clearfix">
+	<div class="span-8">
+		<a href="signout.php" class="buttonMinor">Sign Out</a>
+	</div>
+	<div class="span-8 last right">
+		<a href="share.php" class="button">Ask for Advice</a>
+	</div>
+</div>
+	
 <?php if (!empty($urlData)) {?>
 
 <h2>Your Results</h2>
@@ -180,12 +204,31 @@ foreach($friendsApiResults as $friendsApiResult)
 <?php foreach($urlData as $url) { ?>
 	<div class="span-16 clearfix result">
 		<div class="span-10">
-			<h3><a href="<?= $url['url'] ?>"><?=$url['title'] ?></a></h3>
-			<p><?= $url['message'] ?></p>
-			<?php foreach($url['users'] as $user){ ?>
-				<p><img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
-					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?>
-				<img <?= $user['response'] ?> alt="cute" width="30" height="30" /></p>
+			<h3><a href="<?= $url['url'] ?>">
+				<?= strlen($url['title']) > 30 ? substr($url['title'], 0, 30) . "..." : $url['title']; ?>
+			</a></h3>
+			<blockquote>&ldquo;<?= $url['message'] ?>&rdquo;</blockquote>
+			<?php
+				foreach($url['users'] as $user){
+					switch($user['response']) {
+						case 'positive':
+							$responseImage = '/static/img/thumbs-up.png';
+							$responseText = $friendsData[$user['user_id']]['screen_name'].' likes';
+							break;
+						case 'negative':
+							$responseImage = '/static/img/thumbs-down.png';
+							$responseText = $friendsData[$user['user_id']]['screen_name'].' dislikes';
+							break;
+						default:
+							$responseImage = '/static/img/qmark.png';
+							$responseText = $friendsData[$user['user_id']]['screen_name'].' has not responded';
+					}
+			?>
+				<p>
+					<img src="<?= $responseImage ?>" alt="<?= $responseText ?>" width="30" height="30" />
+					<img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
+					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name'] ?>
+				</p>
 			<?php } ?>
 		</div>
 		<div class="span-6 last">
@@ -200,11 +243,16 @@ foreach($friendsApiResults as $friendsApiResult)
 <?php } ?>
 <!-- Iterate End -->
 
-<div class="span-8">
-	<p class="back"><a href="/?page=<?= $nextPageNumber ?>">Next Page</a></p>
-</div>
-<form action="share.php" method="get">
-	<p class="right"><input type="submit" value="Ask For Advice" class="button" /></p>
-</form>
+<!-- Pagination -->
+<p class="right small">
+<?php if ($previousPageNumber != 0): ?>
+	<a href="/?page=<?= $previousPageNumber ?>">&laquo; Newer</a>
+<?php endif; ?>
+	Page <?= $pageNumber ?>
+<?php if ($nextPageNumber != 0): ?>
+	<a href="/?page=<?= $nextPageNumber ?>">Older &raquo;</a>
+<?php endif; ?>
+</p>
+
 
 <?php require('./template/footer.php'); ?>
