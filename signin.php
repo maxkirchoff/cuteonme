@@ -7,7 +7,6 @@
  * page.  The included header file checks if the user is already signed in.
  */
 
-$unauthedAllowed = true;
 require('./template/header.php');
 ?>
 

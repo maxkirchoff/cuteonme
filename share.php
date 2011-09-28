@@ -9,6 +9,7 @@
  */
 
 $title = 'Is this cute on me?';
+require('./signed-in-check.php');
 require('./template/header.php');
 
 // Setup Twitter Connection

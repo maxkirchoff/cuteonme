@@ -20,6 +20,7 @@
  */
 
 $title = 'Cute On Me Results';
+require('./signed-in-check.php');
 require('./template/header.php');
 
 // Build OAuth object
