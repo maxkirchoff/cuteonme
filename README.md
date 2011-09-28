@@ -14,60 +14,38 @@ Read more about [how it works](/awesm/cuteonme/docs/how-it-works.markdown)
 
 Install required packages
 
-<code>
-apt-get install php5 php5-curl apache2 git-core
-</code>
+    apt-get install php5 php5-curl apache2 git-core
 
 Download the repo
 
-<code>
-git clone git@github.com:awesm/hackdisrupt.git cuteonme
-</code>
+    git clone git@github.com:awesm/hackdisrupt.git cuteonme
 
 Update the submodules
 
-<code>
-cd cuteonme
-
-git submodule init
-
-git submodule update
-
-cd ..
-</code>
+    cd cuteonme
+    git submodule init
+    git submodule update
+    cd ..
 
 Copy the application to apache's directory
 
-<code> 
-cp -R cuteonme /var/www/
-</code>
+    cp -R cuteonme /var/www/
 
 Update the apache configuration
 
-<code>
-cp cuteonme/setup/cuteonme-apache-config /etc/apache2/sites-available/cuteonme
-
-a2dissite default
-
-a2ensite cuteonme
-
-apache2ctl restart
-</code>
+    cp cuteonme/setup/cuteonme-apache-config /etc/apache2/sites-available/cuteonme
+    a2dissite default
+    a2ensite cuteonme
+    apache2ctl restart
 
 Set www.cuteon.me as a valid hostname
 
-<code>
-vi /etc/hosts
-
-\# add: 127.0.0.1    www.cuteon.me
-</code>
+    vi /etc/hosts
+    # add: 127.0.0.1    www.cuteon.me
 
 Test your installation
 
-<code>
-curl http://www.cuteon.me/static/html/test-install.html
-
-\# response should be: "Installation successful!"
-</code>
+    curl http://www.cuteon.me/static/html/test-install.html
+    # response should be: "Installation successful!"
 
 Try out the app <http://CuteOn.Me>
