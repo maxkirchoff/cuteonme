@@ -101,17 +101,17 @@ foreach ($results['groups'] as $originalUrlGroup)
 		// goal_2 is negative
 		if ($tagGroup['conversions']['goal_1']['count'] > 0)
 		{
-			$userResponse = 'src="/static/img/thumbs-up.png"';
+			$userResponse = 'positive';
 			$positiveResponses++;
 		}
 		elseif ($tagGroup['conversions']['goal_2']['count'] > 0)
 		{
-			$userResponse = 'src="/static/img/thumbs-down.png"';
+			$userResponse = 'negative';
 			$negativeResponses++;
 		}
 		else
 		{
-			$userResponse = 'src="/static/img/qmark.png"';
+			$userResponse = 'unknown';
 		}
 
 		// Add the user's data to the user storage
@@ -208,11 +208,26 @@ foreach($friendsApiResults as $friendsApiResult)
 				<?= strlen($url['title']) > 30 ? substr($url['title'], 0, 30) . "..." : $url['title']; ?>
 			</a></h3>
 			<blockquote>&ldquo;<?= $url['message'] ?>&rdquo;</blockquote>
-			<?php foreach($url['users'] as $user){ ?>
+			<?php
+				foreach($url['users'] as $user){
+					switch($user['response']) {
+						case 'positive':
+							$responseImage = '/static/img/thumbs-up.png';
+							$responseText = $friendsData[$user['user_id']]['screen_name'].' likes';
+							break;
+						case 'negative':
+							$responseImage = '/static/img/thumbs-down.png';
+							$responseText = $friendsData[$user['user_id']]['screen_name'].' dislikes';
+							break;
+						default:
+							$responseImage = '/static/img/qmark.png';
+							$responseText = $friendsData[$user['user_id']]['screen_name'].' has not responded';
+					}
+			?>
 				<p>
-					<img <?= $user['response'] ?> alt="cute" width="30" height="30" />
+					<img src="<?= $responseImage ?>" alt="<?= $responseText ?>" width="30" height="30" />
 					<img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
-					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name']?>
+					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name'] ?>
 				</p>
 			<?php } ?>
 		</div>
