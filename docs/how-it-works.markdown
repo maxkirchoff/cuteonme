@@ -1,6 +1,6 @@
 ## Overview
 
-We built CuteOn.Me to demonstrate how you could use the awe.sm APIs in a sample application.  Checkout a live version of the application at <http://CuteOn.Me> or take a look at the code on github.  The code documents each call that is being made, but here will give an in-depth explanation about how and why utilize awe.sm APIs and features.
+We built CuteOn.Me to demonstrate how you could use the awe.sm APIs in a sample application.  Checkout a live version of the application at <http://CuteOn.Me> or take a look at the code on github.  The code documents each call that is being made, but here we'll give you an in-depth explanation about how and why to utilize awe.sm APIs and features.
 
 ### awe.sm Features
 * create shares
@@ -13,7 +13,7 @@ We built CuteOn.Me to demonstrate how you could use the awe.sm APIs in a sample 
 
 ### Objective
 
-CuteOn.Me is a web application designed for the simple task of **capturing friends' advice for a link**.  Using the awe.sm APIs you can achieve this with a few tasks:
+CuteOn.Me is a web application designed for the simple task of **capturing friends' advice for a link**.  Using the awe.sm APIs and features you can achieve this with a few tasks:
 
 * Create unique shares for each friend with the same URL
 * Display the URL to the friend and capture their vote
@@ -111,7 +111,7 @@ channel: "twitter-dm"
 
 ### Batch Create
 
-Instead of making an API call for each friend to create a share, we can use the batch creation endpoint which allows for an array of values for one field and returns multiple shares.  If our friends had user IDs 17301118 and 190498288, the api call would be:
+Instead of making an API call for each friend to create a share, we can use the batch creation endpoint which allows for an array of values for one field and returns multiple shares.  If our friends had user IDs 190498288 and 371635480, the api call would be:
 
 <code>
 http://api.awe.sm/url/batch.json?v=3&key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&url=http://www.cuteon.me&user_id=17301118&tag[]=190498288&tag[]=371635480&notes=cute%20on%20me%20right%3F&user_id_username=bhiles&user_id_icon_url=http://a0.twimg.com/profile_images/1292259951/f_ing_social_media_head_normal.jpg&tool=tHSSFr&channel=twitter-message
@@ -123,7 +123,7 @@ For each of your friends to see the URL you want their advice on, you need to se
 
 ## Update Shares
 
-After you send a direct message, the response includes metadata about the share.  awe.sm shares have specific fields for this kind of metadata, so you can update the fields.
+After you send a direct message, the response includes metadata about the post.  awe.sm shares have specific fields for this kind of metadata, so you can update these fields.
 
 * service\_postid = the ID of the direct message
 * service\_postid\_shared\_at = the time the share was created
@@ -132,7 +132,7 @@ After you send a direct message, the response includes metadata about the share.
 [Update endpoint documentation](https://github.com/awesm/awesm-dev-tools/wiki/Create-API#wiki-update)
 
 ## Redirect Friends
-Your friends will receive a direct message containing an awe.sm URL.  The default configuration for awe.sm will have this link redirect to the URL specified.  But, we want to display the URL and capture a voting action from the friend.  We will need javascript to capture the friend's action, but since the URL could be anything, we won't be able to have javascript running on every URL.  Instead, we can to redirect the friend back to a page we host.  Then we can display the URL using an iframe and easily run javascript on the page to capture the voting choice.  awe.sm has a feature called redirection patterns where any of a share's metadata fields can be used to build the URL that a user is redirected to after they click an awe.sm URL.  Our redirect pattern needs the following logic:
+Your friends will receive a direct message containing an awe.sm URL.  The default configuration for awe.sm will have this link redirect to the URL specified.  But, we want to display the URL and capture a voting action from the friend.  We will need javascript to capture the friend's action, but since the URL could be anything, we won't be able to have javascript running on every URL.  Instead, we can redirect the friend back to a page we host.  Then we can display the URL using an iframe and easily run javascript on the page to capture the voting choice.  awe.sm has a feature called redirection patterns where any of a share's metadata fields can be used to build the URL that a user is redirected to after they click an awe.sm URL.  Our redirect pattern needs the following logic:
 
 * redirect to http://www.cuteon.me so we can run javascript on the page
 * query parameters
@@ -152,7 +152,9 @@ An illustration for the flow is:
 <code>diagram</code>
 
 ## Conversions
-Once a friend follows the link and ends up on the opinion page, they can make their voting choice.  awe.sm shares so far have metadata associated with them, but when a user interacts with a link actual data is collected.  The simples form of data is clicks.  When a user clicks on a link, we capture that a click occurred.  Another type of data is conversions, which allow you to capture user-defined actions.  The actions we want to collect is whether a friend votes _yes_ or _no_ for the URL displayed.  awe.sm supports 5 different conversion types per project, so CuteOn.Me is configured for the first conversion to be a _yes_ vote, and the second type to be for a _no_ vote.  Conversions are collected by calling an API endpoint specifying the awe.sm share, the conversion type, and the value.   We have a javascript library that takes care of most of the heavy lifting, so your code just needs to include the library and make a javascript call to execute.
+Once a friend follows the link and ends up on the opinion page, they can make their voting choice.  awe.sm shares so far have metadata associated with them, but when a user interacts with a link actual data is collected.  The simplest form of data is clicks.  When a user clicks on a link, we capture that a click occurred.  Another type of data is conversions, which allow you to capture user-defined actions.  The actions we want to collect is whether a friend votes _yes_ or _no_ for the URL displayed.  awe.sm supports 5 different conversion types per project, so CuteOn.Me is configured for the first conversion type to be a _yes_ vote, and the second type to be for a _no_ vote.  Conversions are collected by calling an API endpoint specifying the awe.sm share, the conversion type, and the value.   We have a javascript library that takes care of most of the heavy lifting, so your code just needs to include the library and make a javascript call to execute.
+
+Sample code
 
 <code>
 `<script src="http://widgets.awe.sm/v3/widgets.js?key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743"></script>`
@@ -170,7 +172,7 @@ Once a friend follows the link and ends up on the opinion page, they can make th
 
 ## Stats
 
-To show you what your friends voted, we need to query awe.sm for your data.  The awe.sm Stats API allows you to query data you created and collected inside awe.sm.  We want to group by the URLs you shared, and group again by the friends you shared to to see how each friend voted.  This translates to a Stats API call filtered by our user_id, grouped by original_url, and then pivoted by tag.  We also want to see conversion data which need to be enabled in the call.  Finally, we sort by shared_at so we can see the URL shared most recently first.
+To show you what your friends voted, we need to query awe.sm for your data.  The awe.sm Stats API allows you to query data you created and collected inside awe.sm.  We want to group by the URLs you shared, and group again by the friends you shared with so we can see how each friend voted.  This translates to a Stats API call filtered by our user_id, grouped by original_url, and then pivoted by tag.  We also want to see conversion data which needs to be enabled in the call.  Finally, we sort by shared_at so we can see the URL shared most recently first.
 
 Request
 
@@ -186,13 +188,17 @@ sample code
 
 [Stats API documentation](https://github.com/awesm/awesm-dev-tools/wiki/Stats-API)
 
-The response only shows raw data, so conversions are only displayed as having numeric values, there is no logic in the API call that says whether what a friend voted.  We need to add an algorithm to interpret the voting conversion data into what a friend voted.  The algorithm is: 
+The response only shows raw data, so conversions are only displayed as having numeric values.  There is no logic in the API call that says whether what a friend voted, instead we need to add an algorithm to transform the voting conversion data into what a friend voted.  The algorithm is: 
 
-1. if goal\_1 (yes conversion type) count > 0, then vote is a _yes_
-* else if goal\_2 (no conversion type) count > 0, then vote is _no_
-* else they didn't vote
+<code>
+if goal\_1 (_yes_ conversion type) count > 0, then vote is a _yes_
 
-The stats API call allows us to populate the majority of the dashboard.  We can iterate over each URL that was shared, find each of the friends the URL that was shared, and calculate each friends' vote.  To make the dashboard more helpful we include more data.  The title of the URL is displayed allows for a human readable value for the URL.  Also, the message that was sent along with the link is displayed.  All of this collected using stats API calls.
+else if goal\_2 (_no_ conversion type) count > 0, then vote is _no_
+
+else _didn't vote_
+</code>
+
+The stats API call allows us to populate the majority of the dashboard.  We can iterate over each URL that was shared, find each of the friends the URL that was shared, and calculate each friends' vote.  To make the dashboard more helpful we include more data.  The title of the URL is displayed to allow for a human readable value for the URL.  Also, the message that was sent along with the link is displayed.  All of this collected using stats API calls.
 
 ## Conclusion
 

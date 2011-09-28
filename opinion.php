@@ -12,7 +12,6 @@
  * javascript which is included in the HTML.
  */
 
-$unauthedAllowed = true;
 require('./config.php');
 
 // Show a default piture if no icon URL exists

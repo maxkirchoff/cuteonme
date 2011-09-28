@@ -12,6 +12,7 @@
  */
 
 $title = 'We&rsquo;ll see what your friends say&hellip;';
+require('./signed-in-check.php');
 require('./template/header.php');
 
 // Build OAuth object
