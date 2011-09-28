@@ -3,7 +3,7 @@ A simple web application that uses the awe.sm APIs to get quick advice from your
 
 Try it out at <http://CuteOn.Me>
 
-Read more about [how it works](/awesm/cuteonme/blob/master/docs/how-it-works.markdown)
+Read more about [how it works](/awesm/cuteonme/blob/master/docs/how-it-works.md)
 
 Or just go take a look at the code
 
