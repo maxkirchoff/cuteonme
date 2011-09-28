@@ -7,7 +7,7 @@ Read more about [how it works](/awesm/cuteonme/blob/master/docs/how-it-works.mar
 
 Or just go take a look at the code
 
-### Code Layout
+### Code Guide
 
 The application uses Twitter to identify you as a user and requires that you grant our CuteOn.Me Twitter application access to send direct messages to your friends. If you are going to dive into the code, you should examine the code in the following order:
 

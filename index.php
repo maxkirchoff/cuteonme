@@ -1,6 +1,9 @@
 <?php
 
 /**
+ * See the README.md for a guide to reading the code, because accessing this page
+ * requires you to authenticate with Twitter which is a muli-step flow.
+ * 
  * This is the dashboard for the application.  You are redirected here once
  * you have authenticated with Twitter and granted the awe.sm CuteOn.Me Twitter
  * application access.  This page displays all the URLs you have shared with
