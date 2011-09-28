@@ -1,0 +1,14 @@
+{
+  "name": "Cute On Me Extension",
+  "version": "1.0",
+  "description": "Popup helper for CuteOn.Me Sharing",
+  "browser_action": {
+    "default_icon": "robot.png",
+    "popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ]
+}
