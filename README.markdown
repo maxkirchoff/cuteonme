@@ -28,8 +28,11 @@ Update the submodules
 
 <code>
 cd cuteonme
+
 git submodule init
+
 git submodule update
+
 cd ..
 </code>
 
@@ -43,8 +46,11 @@ Update the apache configuration
 
 <code>
 cp cuteonme/setup/cuteonme-apache-config /etc/apache2/sites-available/cuteonme
+
 a2dissite default
+
 a2ensite cuteonme
+
 apache2ctl restart
 </code>
 
