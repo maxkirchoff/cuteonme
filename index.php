@@ -6,7 +6,7 @@
  * application access.  This page displays all the URLs you have shared with
  * your friends as well as their responses.
  *
- * The included header file completes the OAuth flow, confirms the user is
+ * The included singed-in-check file completes the OAuth flow, confirms the user is
  * logged in, or redirects new users back to the login page.  The awe.sm Stats API
  * is called to fetch all of the urls you shared with your friends, what friends
  * you shared with, what their respones were, and additional metadata about the url.
