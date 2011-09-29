@@ -36,7 +36,7 @@ $follwersIds = $connection->get(
 );
 
 // Create the users that are followers and friends
-$mutualFriends = array_intersect($friendsIds, $follwersIds);
+$mutualFriends = array_intersect($friendsIds->ids, $follwersIds->ids);
 
 // Find the information about those friends in a batched manner.
 $friendsBatch = array_chunk($mutualFriends, 100);
