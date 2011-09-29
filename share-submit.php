@@ -103,7 +103,7 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 <p>A direct message has been sent to your selected friends on Twitter.</p>
 <p>Return to <em>Cute On Me</em> later to see the results.</p>
 
-<?php if (empty($_REQUEST['ref'])): // Hide this button when invoked from a browser extension ?>
+<?php if (empty(@$_REQUEST['ref'])): // Hide this button when invoked from a browser extension ?>
 <div class="right bottom">
 	<a href="/index.php" id="done" class="button">Alrighty Then</a>
 </div>
