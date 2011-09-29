@@ -48,7 +48,7 @@ To capture each friend's advice we need a way to differentiate one friend from a
 
 Visually, creating a share looks like you are tagging a shortlink with metadata:
 
-![Share with metadata](/img/share.png)
+![Share with metadata](img/share.png)
 
 For this applicaiton, the destination URL will be the URL we want our friends to see and vote on, and we'll include additional metadata so we can associate each URL to each of our friends as well as track other attributes.  
 
@@ -67,17 +67,17 @@ Additional values to include:
 
 Request URL
 
-[http://api.awe.sm/url.json?  
-v=3&  
-key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&  
-url=http://www.cuteon.me&  
-user_id=17301118&  
-tag=190498288&  
-notes=cute%20on%20me%20right%3F&  
-user_id_username=bhiles&  
-user_id_icon_url=http://a0.twimg.com/profile_images/1292259951/f_ing_social_media_head_normal.jpg&  
-tool=tHSSFr&  
-channel=twitter-message](http://api.awe.sm/url.json?v=3&key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&url=http://www.cuteon.me&user_id=17301118&tag=190498288&notes=cute%20on%20me%20right%3F&user_id_username=bhiles&user_id_icon_url=http://a0.twimg.com/profile_images/1292259951/f_ing_social_media_head_normal.jpg&tool=tHSSFr&channel=twitter-message) 
+    http://api.awe.sm/url.json?
+        v=3&
+        key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&
+        url=http://www.cuteon.me&
+        user_id=17301118&
+        tag=190498288&
+        notes=cute%20on%20me%20right%3F&
+        user_id_username=bhiles&
+        user_id_icon_url=http://a0.twimg.com/profile_images/1292259951/f_ing_social_media_head_normal.jpg&
+        tool=tHSSFr&
+        channel=twitter-message
 
 JSON Response
 
@@ -122,18 +122,15 @@ JSON Response
 
 Instead of making an API call for each friend to create a share, we can use the batch creation endpoint which allows for an array of values for one field and returns multiple shares.  If our friends had user IDs 190498288 and 371635480, the api call would be:
 
-[http://api.awe.sm/url/batch.json?  
-v=3&  
-key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&  
-url=http://www.cuteon.me&  
-user_id=17301118&  
-notes=cute%20on%20me%20right%3F&  
-user_id_username=bhiles&  
-user_id_icon_url=http://a0.twimg.com/profile_images/1292259951/f_ing_social_media_head_normal.jpg&  
-tool=tHSSFr&  
-channel=twitter-message&  
-tag[]=190498288&  
-tag[]=371635480](http://api.awe.sm/url/batch.json?v=3&key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&url=http://www.cuteon.me&user_id=17301118&notes=cute%20on%20me%20right%3F&user_id_username=bhiles&user_id_icon_url=http://a0.twimg.com/profile_images/1292259951/f_ing_social_media_head_normal.jpg&tool=tHSSFr&channel=twitter-message&tag[]=190498288&tag[]=371635480)
+    http://api.awe.sm/url/batch.json?
+        v=3&
+        key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&
+        url=http://www.cuteon.me&user_id=17301118&notes=cute%20on%20me%20right%3F&
+        user_id_username=bhiles&user_id_icon_url=http://a0.twimg.com/profile_images/1292259951/f_ing_social_media_head_normal.jpg&
+        tool=tHSSFr&
+        channel=twitter-message&
+        tag[]=190498288&
+        tag[]=371635480
 
 ## Share with friends
 
@@ -184,15 +181,15 @@ To show you what your friends voted, we need to query awe.sm for your data.  The
 
 Request URL
 
-[http://api.awe.sm/stats/range.json?  
-v=3&  
-key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&  
-user_id=17301118&  
-group_by=original_url&  
-pivot=tag& 
-with_metadata=true&  
-with_conversions=true&  
-sort_type=shared_at](http://api.awe.sm/stats/range.json?v=3&key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&user_id=17301118&group_by=original_url&pivot=tag&with_metadata=true&with_conversions=true&sort_type=shared_at)
+    http://api.awe.sm/stats/range.json?
+        v=3&
+        key=103dbc7485b55313c91aa29176f8ee2ba3e95fe949c574aa5f2505e26a5bb743&
+        user_id=17301118&
+        group_by=original_url&
+        pivot=tag&
+        with_metadata=true&
+        with_conversions=true&
+        sort_type=shared_at
 
 [Stats API documentation](https://github.com/awesm/awesm-dev-tools/wiki/Stats-API)
 
