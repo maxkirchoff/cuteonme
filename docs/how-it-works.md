@@ -195,9 +195,9 @@ Request URL
 
 The response only shows raw data, so conversions are only displayed as having numeric values.  There is no logic in the API call that says whether what a friend voted, instead we need to add an algorithm to transform the voting conversion data into what a friend voted.  The algorithm is: 
 
-    if goal\_1 (_yes_ conversion type) count > 0, then vote is a _yes_
-    else if goal\_2 (_no_ conversion type) count > 0, then vote is _no_
-    else _didn't vote_
+    if goal_1 (yes conversion type) count > 0, then vote is a yes
+    else if goal_2 (no conversion type) count > 0, then vote is no
+    else didn't vote
 
 The stats API call allows us to populate the majority of the dashboard.  We can iterate over each URL that was shared, find each of the friends the URL that was shared, and calculate each friends' vote.  To make the dashboard more helpful we include more data.  The title of the URL is displayed to allow for a human readable value for the URL.  Also, the message that was sent along with the link is displayed.  All of this collected using stats API calls.
 
