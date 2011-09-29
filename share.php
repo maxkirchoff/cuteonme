@@ -71,7 +71,7 @@ foreach($friendsBatch as $batch)
 	<h3 class="bottomless">Link</h3>
 	<p class="label">Paste the page where your friends can check it out</p>
 	<p><input type="text" name="url" class="text"
-		placeholder="http://amazon.com/item123" value="<?= $_REQUEST['url'] ?>" /></p>
+		placeholder="http://amazon.com/item123" value="<?= @$_REQUEST['url'] ?>" /></p>
 	
 	<h3 class="bottomless">Message</h3>
 	<p class="label">One sentence &mdash; this has to fit in a Twitter message</p>
