@@ -101,10 +101,12 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 <h2><span>We&rsquo;ll see what your friends say&hellip;</span></h2>
 
 <p>A direct message has been sent to your selected friends on Twitter.</p>
-<p>Return to <em>Cute On Me</em> to see the results.</p>
+<p>Return to <em>Cute On Me</em> later to see the results.</p>
 
+<?php if (empty($_REQUEST['ref'])): // Hide this button when invoked from a browser extension ?>
 <div class="right bottom">
-	<a href="/index.php" class="button">Alrighty Then</a>
+	<a href="/index.php" id="done" class="button">Alrighty Then</a>
 </div>
+<?php endif; ?>
 
 <?php require('./template/footer.php'); ?>

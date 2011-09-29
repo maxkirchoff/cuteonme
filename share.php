@@ -36,7 +36,7 @@ $follwersIds = $connection->get(
 );
 
 // Create the users that are followers and friends
-$mutualFriends = array_intersect($friendsIds, $follwersIds);
+$mutualFriends = array_intersect($friendsIds->ids, $follwersIds->ids);
 
 // Find the information about those friends in a batched manner.
 $friendsBatch = array_chunk($mutualFriends, 100);
@@ -68,11 +68,17 @@ foreach($friendsBatch as $batch)
 <h2><span>Of course it is, but let&rsquo;s make sure&hellip;</span></h2>
 
 <form action="share-submit.php" method="post">
+
+<?php if (!empty($_REQUEST['ref'])): ?>
+	<div class="hidden">
+<?php endif; ?>
 	<h3 class="bottomless">Link</h3>
 	<p class="label">Paste the page where your friends can check it out</p>
 	<p><input type="text" name="url" class="text"
 		placeholder="http://amazon.com/item123" value="<?= $_REQUEST['url'] ?>" /></p>
-	
+<?php if (!empty($_REQUEST['ref'])): ?>
+	</div>
+<?php endif; ?>
 	<h3 class="bottomless">Message</h3>
 	<p class="label">One sentence &mdash; this has to fit in a Twitter message</p>
 	<p><textarea name="message" maxlength="120">Do you think this would be cute on me? Real quick: </textarea></p>
@@ -92,9 +98,13 @@ foreach($friendsBatch as $batch)
 		<?php } ?>
 	</ul>
 	
+<?php if (!empty($_REQUEST['ref'])): ?>
+	<input type="hidden" name="ref" value="<?= $_REQUEST['ref'] ?>" />
+<?php endif; ?>
+	
 	<div class="span-16 clearfix">
 	<div class="span-8">
-		<a href="/" class="buttonMinor">Never Mind</a>
+		<a href="/" id="cancel" class="buttonMinor">Never Mind</a>
 	</div>
 	<div class="span-8 last right"><input type="submit"
 		value="Ask For Advice" class="button" /></div>
@@ -133,6 +143,14 @@ $('input[type="checkbox"]').change(function(e) {
 		$(this).parent().parent().removeClass('friendSelected');
 	}
 });
+
+<?php if (!empty($_REQUEST['ref'])): ?>
+// Cancel button closes the pop-up window if coming from a browser extension
+$("#cancel").click(function(e) {
+	e.preventDefault();
+	self.close();
+});
+<?php endif; ?>
 
 </script>
 
