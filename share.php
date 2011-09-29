@@ -69,14 +69,14 @@ foreach($friendsBatch as $batch)
 
 <form action="share-submit.php" method="post">
 
-<?php if (!empty(@$_REQUEST['ref'])): ?>
+<?php if (!empty($_REQUEST['ref'])): ?>
 	<div class="hidden">
 <?php endif; ?>
 	<h3 class="bottomless">Link</h3>
 	<p class="label">Paste the page where your friends can check it out</p>
 	<p><input type="text" name="url" class="text"
 		placeholder="http://amazon.com/item123" value="<?= @$_REQUEST['url'] ?>" /></p>
-<?php if (!empty(@$_REQUEST['ref'])): ?>
+<?php if (!empty($_REQUEST['ref'])): ?>
 	</div>
 <?php endif; ?>
 	<h3 class="bottomless">Message</h3>
@@ -98,7 +98,7 @@ foreach($friendsBatch as $batch)
 		<?php } ?>
 	</ul>
 	
-<?php if (!empty(@$_REQUEST['ref'])): ?>
+<?php if (!empty($_REQUEST['ref'])): ?>
 	<input type="hidden" name="ref" value="<?= @$_REQUEST['ref'] ?>" />
 <?php endif; ?>
 	
@@ -144,7 +144,7 @@ $('input[type="checkbox"]').change(function(e) {
 	}
 });
 
-<?php if (!empty(@$_REQUEST['ref'])): ?>
+<?php if (!empty($_REQUEST['ref'])): ?>
 // Cancel button closes the pop-up window if coming from a browser extension
 $("#cancel").click(function(e) {
 	e.preventDefault();
