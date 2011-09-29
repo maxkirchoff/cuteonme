@@ -48,7 +48,7 @@ To capture each friend's advice we need a way to differentiate one friend from a
 
 Visually, creating a share looks like you are tagging a shortlink with metadata:
 
-![Share with metadata](img/share.png)
+![Share with metadata](/awesm/cuteonme/raw/master/docs/img/share.png)
 
 For this applicaiton, the destination URL will be the URL we want our friends to see and vote on, and we'll include additional metadata so we can associate each URL to each of our friends as well as track other attributes.  
 
