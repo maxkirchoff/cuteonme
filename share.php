@@ -26,13 +26,19 @@ $friends = array();
 // Get the signed in user's Twitter friends IDs
 $friendsIds = $connection->get(
 		'friends/ids',
-		array ('user_id' => $_SESSION['access_token']['user_id'])
+		array (
+				'user_id' => $_SESSION['access_token']['user_id'],
+				'cursor' => -1
+		)
 );
 
 // Get the signed in user's Twitter followers IDs
 $follwersIds = $connection->get(
 		'followers/ids',
-		array ('user_id' => $_SESSION['access_token']['user_id'])
+		array (
+				'user_id' => $_SESSION['access_token']['user_id'],
+				'cursor' => -1
+		)
 );
 
 // Create the users that are followers and friends
