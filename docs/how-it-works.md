@@ -3,12 +3,12 @@
 We built CuteOn.Me to demonstrate how you could use the awe.sm APIs in a sample application.  Using the awe.sm APIs is not the most efficient way to build this application, but it allows us to demonstrate many features of awe.sm and its APIs. Checkout a live version of the application at <http://CuteOn.Me> or take a look at the code.  The code documents its logic, but here we'll give you an in-depth explanation about how and why to utilize awe.sm APIs and features.
 
 ### awe.sm Features
-* [create shares](#create)
-* [batch creation of shares](#batch)
-* [update shares with post metadata](#update)
-* [redirection patterns](#redirectionpatterns)
-* [conversion tracking](#conversions)
-* [stats](#stats)
+* create shares
+* batch creation of shares
+* update shares with post metadata
+* redirection patterns
+* conversion tracking
+* stats
 * no data stored on the server
 
 The live code uses the performance branch which has additional logic for features like the chrome extension.  Feel free to look over that code, but the additional features clutter the code, so we recommend to looking at the simpler master branch first.
@@ -43,8 +43,6 @@ The code doesn't persist any information because all the data is stored inside T
 ## Create shares
 
 ### Single create
-
-<h3><a href="#create">Another Single Endpoint</a></h3>
 
 To capture each friend's advice we need a way to differentiate one friend from another.  Using awe.sm we can easily create a URL for each friend using awe.sm shares.  awe.sm shares let you tag metadata to a URL and provide you with a short link that redirects to your destination URL.  
 
