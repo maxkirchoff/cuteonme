@@ -51,7 +51,7 @@ Update the submodules
 
 Copy the application to apache's directory
 
-    cp -R cuteonme/code /var/www/cuteonme
+    rsync -r --delete cuteonme/code/ /var/www/cuteonme
 
 Update the apache configuration
 
