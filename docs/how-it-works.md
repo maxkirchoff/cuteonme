@@ -1,14 +1,14 @@
 ## Overview
 
-We built CuteOn.Me to demonstrate how you could use the awe.sm APIs in a sample application.  Using the awe.sm APIs is not the most efficient way to build this application, but it allows us to demonstrate many features of awe.sm and its APIs. Checkout a live version of the application at <http://CuteOn.Me> or take a look at the code.  The code documents each call that is being made, but here we'll give you an in-depth explanation about how and why to utilize awe.sm APIs and features.
+We built CuteOn.Me to demonstrate how you could use the awe.sm APIs in a sample application.  Using the awe.sm APIs is not the most efficient way to build this application, but it allows us to demonstrate many features of awe.sm and its APIs. Checkout a live version of the application at <http://CuteOn.Me> or take a look at the code.  The code documents its logic, but here we'll give you an in-depth explanation about how and why to utilize awe.sm APIs and features.
 
 ### awe.sm Features
-* create shares
-* batch creation of shares
-* update shares with post metadata
-* redirection patterns
-* conversion tracking
-* stats
+* [create shares](#create)
+* [batch creation of shares](#batch)
+* [update shares with post metadata](#update)
+* [redirection patterns](#redirectionpatterns)
+* [conversion tracking](#conversions)
+* [stats](#stats)
 * no data stored on the server
 
 The live code uses the performance branch which has additional logic for features like the chrome extension.  Feel free to look over that code, but the additional features clutter the code, so we recommend to looking at the simpler master branch first.
@@ -42,7 +42,7 @@ The code doesn't persist any information because all the data is stored inside T
 
 ## Create shares
 
-### Single create
+### Single create <a id="create"/>
 
 To capture each friend's advice we need a way to differentiate one friend from another.  Using awe.sm we can easily create a URL for each friend using awe.sm shares.  awe.sm shares let you tag metadata to a URL and provide you with a short link that redirects to your destination URL.  
 
@@ -118,7 +118,7 @@ JSON Response
 
 [Create API documentation](https://github.com/awesm/awesm-dev-tools/wiki/Create-API)
 
-### Batch Create
+### Batch Create <a id="batch"/>
 
 Instead of making an API call for each friend to create a share, we can use the batch creation endpoint which allows for an array of values for one field and returns multiple shares.  If our friends had user IDs 190498288 and 371635480, the api call would be:
 
@@ -136,7 +136,7 @@ Instead of making an API call for each friend to create a share, we can use the 
 
 For each of your friends to see the URL you want their advice on, you need to send each friend the awe.sm URL that was created for of them.  CuteOn.Me uses Twitter direct messages for sharing.  So we just need to extract the awe.sm URL from the create API's response and send a direct message to each friend.
 
-## Update Shares
+## Update Shares <a id="update"/>
 
 After you send a direct message, the response includes metadata about the post.  awe.sm shares have specific fields for this kind of metadata, so you can update these fields.
 
@@ -146,7 +146,7 @@ After you send a direct message, the response includes metadata about the post. 
  
 [Update endpoint documentation](https://github.com/awesm/awesm-dev-tools/wiki/Create-API#wiki-update)
 
-## Redirect Friends
+## Redirect Friends <a id="redirectionpatterns"/>
 Your friends will receive a direct message containing an awe.sm URL.  The default configuration for awe.sm will have this link redirect to the URL specified.  But, we want to display the URL and capture a voting action from the friend.  We will need javascript to capture the friend's action, but since the URL could be anything, we won't be able to have javascript running on every URL.  Instead, we can redirect the friend back to a page we host.  Then we can display the URL using an iframe and easily run javascript on the page to capture the voting choice.  awe.sm has a feature called redirection patterns where any of a share's metadata fields can be used to build the URL that a user is redirected to after they click an awe.sm URL.  Our redirect pattern needs the following logic:
 
 * redirect to http://www.cuteon.me so we can run javascript on the page
@@ -162,7 +162,7 @@ The actual redirection pattern is:
 
     http://www.cuteon.me/opinion.php?url=%escaped_original_url%&sharer=%user_id_username%&sharer_icon_url=%user_id_icon_url%&message=%notes%&awesm=%awesm_id%
 
-## Conversions
+## Conversions <a id="conversions"/>
 Once a friend follows the link and ends up on the opinion page, they can make their voting choice.  awe.sm shares so far have metadata associated with them, but when a user interacts with a link actual data is collected.  The simplest form of data is clicks.  When a user clicks on a link, we capture that a click occurred.  Another type of data is conversions, which allow you to capture user-defined actions.  The actions we want to collect is whether a friend votes _yes_ or _no_ for the URL displayed.  awe.sm supports 5 different conversion types per project, so CuteOn.Me is configured for the first conversion type to be a _yes_ vote, and the second type to be for a _no_ vote.  Conversions are collected by calling an API endpoint specifying the awe.sm share, the conversion type, and the value.   We have a javascript library that takes care of most of the heavy lifting, so your code just needs to include the library and make a javascript call to execute.
 
 Sample code
@@ -175,7 +175,7 @@ Sample code
 
 [Conversion documentation](https://github.com/awesm/awesm-dev-tools/wiki/Conversion-Tracking)
 
-## Stats
+## Stats <a id="stats"/>
 
 To show you what your friends voted, we need to query awe.sm for your data.  The awe.sm Stats API allows you to query data you created and collected inside awe.sm.  We want to group by the URLs you shared, and group again by the friends you shared with so we can see how each friend voted.  This translates to a Stats API call filtered by our user_id, grouped by original_url, and then pivoted by tag.  We also want to see conversion data which needs to be enabled in the call.  Finally, we sort by shared_at so we can see the URL shared most recently first.
 
