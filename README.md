@@ -60,10 +60,19 @@ Update the apache configuration
     a2ensite cuteonme
     apache2ctl restart
 
+Setup PHP logging
+
+    # add logging to the apache config
+    vi /etc/php5/apache2/php.ini
+        # add: error_log = /var/log/php/error.log 
+    # create a directory to log to
+    mkdir /var/log/php
+    chmod 777 /var/log/php/
+
 Set www.cuteon.me as a valid hostname
 
     vi /etc/hosts
-    # add: 127.0.0.1    www.cuteon.me
+        # add: 127.0.0.1    www.cuteon.me
 
 Test your installation
 
