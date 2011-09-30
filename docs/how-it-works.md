@@ -11,7 +11,7 @@ We built CuteOn.Me to demonstrate how you could use the awe.sm APIs in a sample 
 * stats
 * no data stored on the server
 
-The live code uses the performance branch which has additional logic for features like the chrome extension.  Feel free to look over that code, but the additional features clutter the code, so we recommend to looking at the simpler master branch first.
+The live code uses the performance branch which has additional logic for features like the chrome extension.  Feel free to look over that branch, but the additional features clutter the code, so we recommend looking at the simpler master branch first.
 
 ### Objective
 
@@ -82,38 +82,38 @@ Request URL
 JSON Response
 
     { 
-    awesm_url: "http://CuteOn.Me/2W"
-    awesm_id: "CuteOn.Me_2W"
-    domain: "CuteOn.Me"
-    path: "2W"
-    created_at: "2011-09-26T23:17:47Z"
-    original_url: "http://www.cuteon.me"
-    redirect_url: "http://www.cuteon.me/opinion.php?awesm=CuteOn.Me_2W&sharer_icon_url=&url=http%3A%2F%2Fwww.cuteon.me&message=cute+on+me+right%3F&sharer=bhiles"
-    channel: "twitter-dm"
-    service: "twitter"
-    tool: "hackdisrupttool-twitterdm"
-    application: "hackdisrupttool"
-    parent: null
-    sharer_id: null
-    username: "bhiles"
-    service_userid: null
-    service_postid: null
-    service_postid_metadata: {
-        reach: null
-        shared_at: null
-    }
-    campaign: null
-    campaign_metadata: {
-        description: null
-        name: null
-    }
-    user_id: "17301118"
-    user_id_metadata: {
-        profile_url: null
-        icon_url: null
-    }
-    tag: "190498288"
-    notes: "cute on me right?"
+        awesm_url: "http://CuteOn.Me/2W"
+        awesm_id: "CuteOn.Me_2W"
+        domain: "CuteOn.Me"
+        path: "2W"
+        created_at: "2011-09-26T23:17:47Z"
+        original_url: "http://www.cuteon.me"
+        redirect_url: "http://www.cuteon.me/opinion.php?awesm=CuteOn.Me_2W&sharer_icon_url=&url=http%3A%2F%2Fwww.cuteon.me&message=cute+on+me+right%3F&sharer=bhiles"
+        channel: "twitter-dm"
+        service: "twitter"
+        tool: "hackdisrupttool-twitterdm"
+        application: "hackdisrupttool"
+        parent: null
+        sharer_id: null
+        username: "bhiles"
+        service_userid: null
+        service_postid: null
+        service_postid_metadata: {
+            reach: null
+            shared_at: null
+        }
+        campaign: null
+        campaign_metadata: {
+            description: null
+            name: null
+        }
+        user_id: "17301118"
+        user_id_metadata: {
+            profile_url: null
+            icon_url: null
+        }
+        tag: "190498288"
+        notes: "cute on me right?"
     }
 
 [Create API documentation](https://github.com/awesm/awesm-dev-tools/wiki/Create-API)
@@ -160,7 +160,12 @@ For CuteOn.Me we pass in additional values so when a friend is redirected they g
 
 The actual redirection pattern is:
 
-    http://www.cuteon.me/opinion.php?url=%escaped_original_url%&sharer=%user_id_username%&sharer_icon_url=%user_id_icon_url%&message=%notes%&awesm=%awesm_id%
+    http://www.cuteon.me/opinion.php?
+        url=%escaped_original_url%&
+        sharer=%user_id_username%&
+        sharer_icon_url=%user_id_icon_url%&
+        message=%notes%&
+        awesm=%awesm_id%
 
 ## Conversions <a id="conversions"/>
 Once a friend follows the link and ends up on the opinion page, they can make their voting choice.  awe.sm shares so far have metadata associated with them, but when a user interacts with a link actual data is collected.  The simplest form of data is clicks.  When a user clicks on a link, we capture that a click occurred.  Another type of data is conversions, which allow you to capture user-defined actions.  The actions we want to collect is whether a friend votes _yes_ or _no_ for the URL displayed.  awe.sm supports 5 different conversion types per project, so CuteOn.Me is configured for the first conversion type to be a _yes_ vote, and the second type to be for a _no_ vote.  Conversions are collected by calling an API endpoint specifying the awe.sm share, the conversion type, and the value.   We have a javascript library that takes care of most of the heavy lifting, so your code just needs to include the library and make a javascript call to execute.
@@ -193,13 +198,13 @@ Request URL
 
 [Stats API documentation](https://github.com/awesm/awesm-dev-tools/wiki/Stats-API)
 
-The response only shows raw data, so conversions are only displayed as having numeric values.  There is no logic in the API call that says whether what a friend voted, instead we need to add an algorithm to transform the voting conversion data into what a friend voted.  The algorithm is: 
+The response only shows raw data, so conversions are only displayed as having numeric values.  There is no logic in the API call that says what a friend voted, instead we need to add an algorithm to transform the voting conversion data into what a friend voted.  The algorithm is: 
 
     if goal_1 (yes conversion type) count > 0, then vote is a yes
     else if goal_2 (no conversion type) count > 0, then vote is no
     else didn't vote
 
-The stats API call allows us to populate the majority of the dashboard.  We can iterate over each URL that was shared, find each of the friends the URL that was shared, and calculate each friends' vote.  To make the dashboard more helpful we include more data.  The title of the URL is displayed to allow for a human readable value for the URL.  Also, the message that was sent along with the link is displayed.  All of this collected using stats API calls.
+The stats API call allows us to populate the majority of the dashboard.  We can iterate over each URL that was shared, find each of the friends the URL that was shared to, and calculate each friends' vote.  To make the dashboard more helpful we include more data.  The title of the URL is displayed to allow for a human readable value for the URL.  Also, the message that was sent along with the link is displayed.  All of this collected using stats API calls.
 
 ## Conclusion
 
