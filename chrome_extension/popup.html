@@ -1,15 +1,22 @@
 <html>
+<head>
+<style>
+	body {
+		background: url(loading.gif) #fff no-repeat center center;
+		width: 670px;
+		height: 540px;
+	}
+</style>
+</head>
 <body>
-<script>
-javascript:chrome.tabs.getSelected(null, function(tab){
-    ifr = document.createElement("iframe");
-    ifr.src = "http://www.cuteon.me/share-small.php?url=" + tab.url;
-    ifr.width = "655px";
-    ifr.height = "465px";
-    ifr.frameborder = "0";
-    document.body.appendChild(ifr);    
-    });
-</script>
+	<iframe id="share" src="about:blank" width="100%" height="100%" frameborder="0"></iframe>
+	<script>
+	chrome.tabs.getSelected(
+		null,
+		function(tab) {
+			document.getElementById("share").src = "http://localhost/share.php?ref=chrome&url=" + encodeURIComponent(tab.url);
+		}
+	);
+	</script>
 </body>
 </html>
-

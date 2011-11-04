@@ -1,15 +1,17 @@
 {
 	"name": "CuteOn.Me",
-	"version": "1.0",
+	"version": "1.1",
 	"description": "Popup helper for CuteOn.Me Sharing",
-	"background_page": "background.html",
 	"browser_action": {
-		"default_icon": "icon.png"
+		"default_icon": "icon.png",
+		"default_title": "CuteOn.Me",
+		"default_popup": "popup.html"
 	},
-	"update_url": "http://www.cuteon.me/chrome/updates.xml",
+	"update_url": "http://localhost/chrome/updates.xml",
 	"permissions": [
-		"tabs",
 		"http://*/*",
-		"https://*/*"
+		"https://*/*",
+		"tabs",
+		"debugger"
 	]
 }
