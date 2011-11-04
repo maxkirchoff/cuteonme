@@ -109,11 +109,16 @@ foreach($friendsBatch as $batch)
 <?php endif; ?>
 	
 	<div class="span-16 clearfix">
-	<div class="span-8">
-		<a href="/" id="cancel" class="buttonMinor">Never Mind</a>
-	</div>
-	<div class="span-8 last right"><input type="submit"
-		value="Ask For Advice" class="button" /></div>
+		<div class="span-8">
+		<?php if (empty($_REQUEST['ref'])): ?>
+			<a href="/" id="cancel" class="buttonMinor">Never Mind</a>
+		<?php else: ?>
+			&nbsp;
+		<?php endif; ?>
+		</div>
+		<div class="span-8 last right">
+			<input type="submit" value="Ask For Advice" class="button" />
+		</div>
 	</div>
 </form>
 
@@ -149,15 +154,6 @@ $('input[type="checkbox"]').change(function(e) {
 		$(this).parent().parent().removeClass('friendSelected');
 	}
 });
-
-<?php if (!empty($_REQUEST['ref'])): ?>
-// Cancel button closes the pop-up window if coming from a browser extension
-$("#cancel").click(function(e) {
-	e.preventDefault();
-	self.close();
-});
-<?php endif; ?>
-
 </script>
 
 <?php require('./template/footer.php'); ?>

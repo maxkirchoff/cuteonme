@@ -45,7 +45,11 @@ if (!empty($_REQUEST['oauth_token'])
 
 } elseif (empty($_SESSION['access_token'])) {
 	// No session and the page requires a session
-	header('Location: ./signin.php');
+	if (!empty($_REQUEST['ref'])) {
+		header('Location: ./signin.php?ref='.$_REQUEST['ref']);
+	} else {
+		header('Location: ./signin.php');
+	}
 	exit;
 }
 ?>

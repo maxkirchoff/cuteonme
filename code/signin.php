@@ -19,8 +19,9 @@ require('./template/header.php');
 			help you make up your mind.</p>
 		<p>Share what you're looking to buy. Collect feedback from the people
 			who know you best.</p>
-		<p class="center h3">To begin <a href="signin-redirect.php"> <img
-			src="/static/img/darker.png" alt="Sign in with Twitter" /> </a></p>
+		<p class="center h3">To begin 
+			<a href="signin-redirect.php" <?= (!empty($_REQUEST['ref']))? 'target="_blank"' : '' ?>> 
+			<img src="/static/img/darker.png" alt="Sign in with Twitter" /></a></p>
 	</div>
 	<div class="span-7 last"><img src="/static/img/home.jpg" alt="" /></div>
 </div>
