@@ -103,7 +103,16 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 <p>A direct message has been sent to your selected friends on Twitter.</p>
 <p>Return to <em>Cute On Me</em> later to see the results.</p>
 
-<?php if (empty($_REQUEST['ref'])): // Hide this button when invoked from a browser extension ?>
+<?php if (empty($_REQUEST['ref'])): // Hide this when invoked from a browser extension
+
+	/* Detect Chrome */
+	if (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false):
+?>
+	<p><strong>Next time,</strong> try the <a href="/chrome/cuteonme.crx">Chrome extension</a> for faster sharing!</p>
+<?php
+	endif;
+?>
+
 <div class="right bottom">
 	<a href="/index.php" id="done" class="button">Alrighty Then</a>
 </div>

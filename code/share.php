@@ -87,10 +87,10 @@ foreach($friendsBatch as $batch)
 <?php endif; ?>
 	<h3 class="bottomless">Message</h3>
 	<p class="label">One sentence &mdash; this has to fit in a Twitter message</p>
-	<p><textarea name="message" maxlength="120">Do you think this would be cute on me? Real quick: </textarea></p>
+	<p><textarea name="message" maxlength="120">Do you think this would be cute on me? </textarea></p>
 	
-	<h3 class="bottomless">Select your trusted friends.</h3>
-	<p class="label clearfix">We&rsquo;ll send a custom message to each one
+	<h3 class="bottomless">Select your friends with great taste.</h3>
+	<p class="label clearfix">We&rsquo;ll send an individual message to each one
 		<input type="search" id="friendSearch" placeholder="Search for a friend" />
 	</p>
 	

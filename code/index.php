@@ -195,12 +195,23 @@ foreach($friendsApiResults as $friendsApiResult)
 	<div class="span-8">
 		<a href="signout.php" class="buttonMinor">Sign Out</a>
 	</div>
-	<div class="span-8 last right">
+	<div class="span-8 last right relative extensionCalloutContainer">
 		<a href="share.php" class="button">Ask for Advice</a>
+		<?php
+			/* Detect Chrome */
+			if (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false):
+		?>
+			<div class="extensionCallout">
+				Try the <a href="/chrome/cuteonme.crx">Chrome extension</a> for faster sharing!
+				<div class="extensionCalloutNotch"></div>
+			</div>
+		<?php
+			endif;
+		?>
 	</div>
 </div>
 	
-<?php if (!empty($urlData)) {?>
+<?php if (!empty($urlData)) { ?>
 
 <h2>Your Results</h2>
 
