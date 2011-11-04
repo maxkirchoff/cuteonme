@@ -101,7 +101,7 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 <h2><span>We&rsquo;ll see what your friends say&hellip;</span></h2>
 
 <p>A direct message has been sent to your selected friends on Twitter.</p>
-<p>Return to <a href="http://cuteon.me/"><em>Cute On Me</em></a> later to see the results.</p>
+<p>Return to <a href="http://cuteon.me/" <?= (!empty($_REQUEST['ref']))? 'target="_blank"' : '' ?>><em>Cute On Me</em></a> later to see the results.</p>
 
 <?php if (empty($_REQUEST['ref'])): // Hide this when invoked from a browser extension
 

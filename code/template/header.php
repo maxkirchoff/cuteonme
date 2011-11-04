@@ -8,6 +8,6 @@
 	<link rel="stylesheet" href="/static/css/screen.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js"></script>
 </head>
-<body>
+<body <?= (!empty($_REQUEST['ref']))? 'class="extension"' : '' ?>>
 	<div class="outerContainer">
 		<div class="container">

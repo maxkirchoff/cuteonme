@@ -279,6 +279,11 @@ h2, h3, .h2, .h3 {
 	box-shadow:			0 0 30px #000;
 	padding: 0 10px;
 }
+	.extension .container {
+		-moz-box-shadow:	none;
+		-webkit-box-shadow:	none;
+		box-shadow:			none;
+	}
 .outerContainer {
 	background-color: #84435e;
 	padding: 0 10px;
@@ -286,6 +291,9 @@ h2, h3, .h2, .h3 {
 	margin: 0 auto;
 	height: 100%;
 }
+	.extension .outerContainer {
+		background-color: #fff;
+	}
 
 h1 {
 	text-align: center;
