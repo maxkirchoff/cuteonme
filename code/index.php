@@ -78,11 +78,17 @@ $urlData = array();
 // Create a list of all the twitter user_ids
 $userIdList = array();
 
+// Create a string for Embed.ly
+$embedlyUrls = '';
+
 // Iterate over the URLs found
 foreach ($results['groups'] as $originalUrlGroup)
 {
 	// Extract the URL
 	$url = $originalUrlGroup['original_url'];
+	
+	// Add the URL to the Embed.ly string
+	$embedlyUrls .= urlencode($url).',';
 
 	// Extract URL metadata
 	$urlTitle = $originalUrlGroup['metadata']['title'];
@@ -216,13 +222,30 @@ foreach($friendsApiResults as $friendsApiResult)
 <h2>Your Results</h2>
 
 <!-- Iterate over urls -->
-<?php foreach($urlData as $url) { ?>
-	<div class="span-16 clearfix result">
-		<div class="span-10">
-			<h3><a href="<?= $url['url'] ?>">
+<?php
+	$i = -1;
+	foreach($urlData as $url) {
+		$i++;
+?>
+	<div class="span-16 clearfix">
+		<div class="span-12">
+			<h3><a href="<?= $url['url'] ?>" id="pageTitle<?= $i ?>">
 				<?= strlen($url['title']) > 30 ? substr($url['title'], 0, 30) . "..." : $url['title']; ?>
 			</a></h3>
+	<?php if (!empty($url['message'])): ?>
 			<blockquote>&ldquo;<?= $url['message'] ?>&rdquo;</blockquote>
+	<?php endif; ?>
+		</div>
+		<div class="span-4 last">
+			<p class="right"><img src="/static/img/thumbs-up.png" alt="cute"
+				width="30" height="30" /> <?= $url['percent_positive'] ?>% <img
+				src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" />
+			<?= $url['percent_negative'] ?>%</p>
+		</div>
+	</div>
+	<div class="span-16 clearfix result">
+		<div class="span-11">
+
 			<?php
 				foreach($url['users'] as $user){
 					switch($user['response']) {
@@ -245,17 +268,17 @@ foreach($friendsApiResults as $friendsApiResult)
 					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name'] ?>
 				</p>
 			<?php } ?>
+
 		</div>
-		<div class="span-6 last">
-			<p class="right"><img src="/static/img/thumbs-up.png" alt="cute"
-				width="30" height="30" /> <?= $url['percent_positive'] ?>% <img
-				src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" />
-			<?= $url['percent_negative'] ?>%</p>
-		</div>
+		<div class="span-5 last" id="pagePreview<?= $i ?>"></div>
 	</div>
-<?php }} else { ?>
+<?php 
+		}
+	} else { ?>
 	<h3>You haven't asked any opinions yet.</h3>
-<?php } ?>
+<?php 
+	} 
+?>
 <!-- Iterate End -->
 
 <!-- Pagination -->
@@ -269,5 +292,27 @@ foreach($friendsApiResults as $friendsApiResult)
 <?php endif; ?>
 </p>
 
+<?php if (!empty($embedlyUrls)): ?>
+<script type="text/javascript">
+// Update the original_urls with Embed.ly greatness
+// Make a huge 'url' because jQuery incorrectly double encodes
+$.ajax({
+	type: "GET",
+	url: "http://api.embed.ly/1/oembed?key=805bd726828511e088ae4040f9f86dcd&urls=<?= substr($embedlyUrls, 0, -1) ?>&maxwidth=390&maxheight=390",
+	dataType: "jsonp",
+	success: function(r) {
+		for (var i = 0, iMax = r.length; i < iMax; i++) {
+			if (r[i].title) {
+				document.getElementById("pageTitle"+i).innerHTML = r[i].title;
+			}
+			if (r[i].thumbnail_url) {
+				document.getElementById("pagePreview"+i).innerHTML = '<img src="'+r[i]["thumbnail_url"]+'" class="previewImg"/>';
+			}
+		}
+	}
+});
+
+</script>
+<?php endif; ?>
 
 <?php require('./template/footer.php'); ?>

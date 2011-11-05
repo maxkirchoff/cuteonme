@@ -467,3 +467,7 @@ iframe {
 	border-left: none;
 	border-right: none;
 }
+
+.previewImg {
+	max-width: 190px;
+}
