@@ -236,15 +236,17 @@ foreach($friendsApiResults as $friendsApiResult)
 			<blockquote>&ldquo;<?= $url['message'] ?>&rdquo;</blockquote>
 	<?php endif; ?>
 		</div>
-		<div class="span-4 last">
-			<p class="right"><img src="/static/img/thumbs-up.png" alt="cute"
-				width="30" height="30" /> <?= $url['percent_positive'] ?>% <img
-				src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" />
+		<div class="span-2">
+			<p><img src="/static/img/thumbs-up.png" alt="cute" width="30" height="30" />
+			<?= $url['percent_positive'] ?>%</p>
+		</div>
+		<div class="span-2 right last">
+			<p><img src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" />
 			<?= $url['percent_negative'] ?>%</p>
 		</div>
 	</div>
 	<div class="span-16 clearfix result">
-		<div class="span-11">
+		<div class="span-12">
 
 			<?php
 				foreach($url['users'] as $user){
@@ -270,7 +272,7 @@ foreach($friendsApiResults as $friendsApiResult)
 			<?php } ?>
 
 		</div>
-		<div class="span-5 last" id="pagePreview<?= $i ?>"></div>
+		<div class="span-4 last" id="pagePreview<?= $i ?>"></div>
 	</div>
 <?php 
 		}
@@ -298,7 +300,7 @@ foreach($friendsApiResults as $friendsApiResult)
 // Make a huge 'url' because jQuery incorrectly double encodes
 $.ajax({
 	type: "GET",
-	url: "http://api.embed.ly/1/oembed?key=805bd726828511e088ae4040f9f86dcd&urls=<?= substr($embedlyUrls, 0, -1) ?>&maxwidth=390&maxheight=390",
+	url: "http://api.embed.ly/1/oembed?key=805bd726828511e088ae4040f9f86dcd&urls=<?= substr($embedlyUrls, 0, -1) ?>&maxwidth=150&maxheight=390",
 	dataType: "jsonp",
 	success: function(r) {
 		for (var i = 0, iMax = r.length; i < iMax; i++) {
