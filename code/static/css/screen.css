@@ -40,7 +40,7 @@ h3, .h3 {font-size:1.2em;line-height:1.25;margin-bottom:1.25em;}
 h5 {font-size:1em;font-weight:bold;margin-bottom:1.5em;}
 h6 {font-size:1em;font-weight:bold;}
 h1 img, h2 img, h3 img, h4 img, h5 img, h6 img, p img, li img {margin:0; vertical-align: middle}
-p {margin:0 0 1em;}
+p, h4 {margin:0 0 1em;}
 .left {float:left !important;}
 p .left {margin:1.5em 1.5em 1.5em 0;padding:0;}
 .right {text-align: right}
@@ -369,7 +369,7 @@ h2 {
 	display: none;
 }
 
-.label {
+.label, .userResponse {
 	font-family: sans-serif;
 	font-size: .8em;
 	color: #999;
@@ -469,5 +469,10 @@ iframe {
 }
 
 .previewImg {
-	width: 150px;
+	width: 140px;
+}
+
+h4 {
+	border-bottom: 1px solid #ddd;
+	padding-bottom: .5em;
 }

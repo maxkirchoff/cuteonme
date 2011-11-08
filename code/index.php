@@ -142,6 +142,7 @@ foreach ($results['groups'] as $originalUrlGroup)
 	{
 		$percentPositive = round(($positiveResponses * 100) / count($users));
 		$percentNegative = round(($negativeResponses * 100) / count($users));
+		$percentNeutral = 100 - $percentPositive - $percentNegative;
 	}
 
 	// Fetch the message that was shared with the URL from the awe.sm Stats API
@@ -169,6 +170,7 @@ foreach ($results['groups'] as $originalUrlGroup)
 			'users' => $users,
 			'percent_positive' => $percentPositive,
 			'percent_negative' => $percentNegative,
+			'percent_neutral' => $percentNeutral,
 			'message' => $message,
 			'title' => $urlTitle,
 			'icon_url' => $urlIconUrl
@@ -226,53 +228,48 @@ foreach($friendsApiResults as $friendsApiResult)
 	$i = -1;
 	foreach($urlData as $url) {
 		$i++;
+		
+		$userMarkup = array(
+			'positive' => '',
+			'negative' => '',
+			'unknown' => ''
+		);
+		
+		foreach($url['users'] as $user) {
+			$userMarkup[$user['response']] .= "<p class='userResponse'><img src='{$friendsData[$user['user_id']]['profile_image_url']}' alt='' width='24' height='24' /> {$friendsData[$user['user_id']]['screen_name']}</p>";
+		}		
 ?>
-	<div class="span-16 clearfix">
-		<div class="span-12">
-			<h3><a href="<?= $url['url'] ?>" id="pageTitle<?= $i ?>">
-				<?= strlen($url['title']) > 30 ? substr($url['title'], 0, 30) . "..." : $url['title']; ?>
-			</a></h3>
-	<?php if (!empty($url['message'])): ?>
-			<blockquote>&ldquo;<?= $url['message'] ?>&rdquo;</blockquote>
-	<?php endif; ?>
-		</div>
-		<div class="span-2">
-			<p><img src="/static/img/thumbs-up.png" alt="cute" width="30" height="30" />
-			<?= $url['percent_positive'] ?>%</p>
-		</div>
-		<div class="span-2 right last">
-			<p><img src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" />
-			<?= $url['percent_negative'] ?>%</p>
-		</div>
-	</div>
-	<div class="span-16 clearfix result">
-		<div class="span-12">
+	<div class="span-16 result clearfix">
+		<h2 class="bottomless">
+			<a href="<?= $url['url'] ?>" id="pageTitle<?= $i ?>">
+				<?= strlen($url['title']) > 48 ? substr($url['title'], 0, 48) . "..." : $url['title']; ?>
+			</a>
+		</h2>
+		
+		<blockquote class="center">&ldquo;<?= (!empty($url['message']))? $url['message'] : 'Do you think this would be cute on me?' ?>&rdquo;</blockquote>
+		
+		<div class="span-4" id="pagePreview<?= $i ?>">&nbsp;</div>
 
-			<?php
-				foreach($url['users'] as $user){
-					switch($user['response']) {
-						case 'positive':
-							$responseImage = '/static/img/thumbs-up.png';
-							$responseText = $friendsData[$user['user_id']]['screen_name'].' likes';
-							break;
-						case 'negative':
-							$responseImage = '/static/img/thumbs-down.png';
-							$responseText = $friendsData[$user['user_id']]['screen_name'].' dislikes';
-							break;
-						default:
-							$responseImage = '/static/img/qmark.png';
-							$responseText = $friendsData[$user['user_id']]['screen_name'].' has not responded';
-					}
-			?>
-				<p>
-					<img src="<?= $responseImage ?>" alt="<?= $responseText ?>" width="30" height="30" />
-					<img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
-					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name'] ?>
-				</p>
-			<?php } ?>
-
+		<div class="span-12 clearfix last">
+			<div class="span-12 clearfix last">
+				<div class="span-4">
+					<h4><img src="/static/img/thumbs-up.png" alt="thumbs up" width="24" height="24" />
+					<?= $url['percent_positive'] ?>% Liked It</h4>
+					<?= $userMarkup['positive'] ?>
+				</div>
+				<div class="span-4">
+					<h4><img src="/static/img/thumbs-down.png" alt="thumbs down" width="24" height="24" />
+					<?= $url['percent_negative'] ?>% Disliked It</h4>
+					<?= $userMarkup['negative'] ?>
+				</div>
+				<div class="span-4 last">
+					<h4><img src="/static/img/qmark.png" alt="question mark" width="24" height="24" />
+					<em>Awaiting Reply</em></h4>
+					<?= $userMarkup['unknown'] ?>
+				</div>
+			</div>
+		
 		</div>
-		<div class="span-4 last" id="pagePreview<?= $i ?>"></div>
 	</div>
 <?php 
 		}
@@ -303,9 +300,14 @@ $.ajax({
 	url: "http://api.embed.ly/1/oembed?key=805bd726828511e088ae4040f9f86dcd&urls=<?= substr($embedlyUrls, 0, -1) ?>&maxwidth=150&maxheight=390",
 	dataType: "jsonp",
 	success: function(r) {
+		var title = '';
 		for (var i = 0, iMax = r.length; i < iMax; i++) {
 			if (r[i].title) {
-				document.getElementById("pageTitle"+i).innerHTML = r[i].title;
+				title = r[i].title;
+				if (title.length > 48) {
+					title = title.substr(0, 48) + "&hellip;";
+				}
+				document.getElementById("pageTitle"+i).innerHTML = title;
 			}
 			if (r[i].thumbnail_url) {
 				document.getElementById("pagePreview"+i).innerHTML = '<img src="'+r[i]["thumbnail_url"]+'" class="previewImg"/>';
