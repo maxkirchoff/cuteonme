@@ -11,63 +11,6 @@
 $title = 'Is this cute on me?';
 require('./signed-in-check.php');
 require('./template/header.php');
-
-// Setup Twitter Connection
-$connection = new TwitterOAuth(
-	CONSUMER_KEY,
-	CONSUMER_SECRET,
-	$_SESSION['access_token']['oauth_token'],
-	$_SESSION['access_token']['oauth_token_secret']
-);
-
-// Get list of friends
-$friends = array();
-
-// Get the signed in user's Twitter friends IDs
-$friendsIds = $connection->get(
-		'friends/ids',
-		array (
-				'user_id' => $_SESSION['access_token']['user_id'],
-				'cursor' => -1
-		)
-);
-
-// Get the signed in user's Twitter followers IDs
-$follwersIds = $connection->get(
-		'followers/ids',
-		array (
-				'user_id' => $_SESSION['access_token']['user_id'],
-				'cursor' => -1
-		)
-);
-
-// Create the users that are followers and friends
-$mutualFriends = array_intersect($friendsIds->ids, $follwersIds->ids);
-
-// Find the information about those friends in a batched manner.
-$friendsBatch = array_chunk($mutualFriends, 100);
-foreach($friendsBatch as $batch) 
-{
-	// Get friend details
-	$friendsDetails = $connection->get(
-			'users/lookup',
-			array('user_id' => implode(',', $batch))
-	);
-
-	// Save friend details
-	foreach($friendsDetails as $friendDetails) 
-	{
-		$friendName = strlen($friendDetails->name) > 12 ?
-				substr($friendDetails->name, 0, 11) . "..." : $friendDetails->name;
-		$friends[] = array(
-				'id' => $friendDetails->id,
-				'profile_image_url' => $friendDetails->profile_image_url,
-				'screen_name' => $friendDetails->screen_name,
-				'name' => $friendDetails->name,
-				'display_name' => $friendName
-		);
-	}
-}
 ?>
 
 <h1>Cute On Me?</h1>
@@ -90,19 +33,16 @@ foreach($friendsBatch as $batch)
 	<p><textarea name="message" maxlength="120">Do you think this would be cute on me? </textarea></p>
 	
 	<h3 class="bottomless">Select your friends with great taste.</h3>
-	<p class="label clearfix">We&rsquo;ll send an individual message to each one
-		<input type="search" id="friendSearch" placeholder="Search for a friend" />
-	</p>
+	<p class="label clearfix">We&rsquo;ll send an individual message to each one</p>
 	
-	<ul class="friends">
-		<?php foreach($friends as $friend) { ?>
-			<li class="friend" data-name="@<?= htmlspecialchars(strtolower($friend['screen_name'].' '.$friend['name'])) ?>"><label>
-				<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
-				<img src="<?= $friend['profile_image_url'] ?>" alt="" width="30" height="30" /> 
-				<span title="@<?= $friend['screen_name'] ?>"><?= $friend['display_name'] ?></span>
-			</label></li>
-		<?php } ?>
-	</ul>
+	<div>
+		<select id="listFilter">
+			<option value="">All Friends</option>
+			<optgroup id="lists" label="Or select a list:"></optgroup>
+		</select>
+		<input type="search" id="friendSearch" placeholder="Search for a friend" />
+	</div>
+	<ul id="friends" class="loading"></ul>
 	
 <?php if (!empty($_REQUEST['ref'])): ?>
 	<input type="hidden" name="ref" value="<?= @$_REQUEST['ref'] ?>" />
@@ -123,6 +63,95 @@ foreach($friendsBatch as $batch)
 </form>
 
 <script type="text/javascript">
+
+// Load friends and lists
+$.ajax({
+	type: "GET",
+	url: "/xhr-friends.php",
+	dataType: "json",
+	success: function(r) {
+		console.log(r);
+		
+		// Generate friends markup
+		var friendsLis = "";
+		
+		for (var i = 0, iMax = r.friends.length; i < iMax; i++) {
+			friendsLis += 
+				'<li class="friend" data-name="'+ r.friends[i].search_name +'"><label>'
+			+		'<input type="checkbox" id="friend-'+ r.friends[i].id +'" name="friends[]" value="'+ r.friends[i].id + '" />'
+			+		'<img src="'+ r.friends[i].profile_image_url +'" alt="" width="30" height="30" /> '
+			+		'<span title="@'+ r.friends[i].screen_name +'">'+ r.friends[i].display_name +'</span>'
+			+	'</label></li>';
+		}
+		
+		// Add to document. Remove 'loading' class.
+		var friendsUlDom = document.getElementById("friends");
+		friendsUlDom.innerHTML = friendsLis;
+		friendsUlDom.className = "";
+		
+		// Register clicks on users to the underlying checkbox
+		$('input[type="checkbox"]').change(function(e) {
+			// Change containing <li> style to indicate selection
+			if (e.target.checked) {
+				$(this).parent().parent().addClass('friendSelected').removeClass("hidden");
+			} else {
+				$(this).parent().parent().removeClass('friendSelected');
+			}
+		});
+		
+		// Setup lists list
+		var listsOptions = "";
+		for (i = 0, iMax = r.lists.length; i < iMax; i++) {
+			listsOptions += '<option value="'+ r.lists[i].friends.join(",") +'">'+ r.lists[i].name +'</option>';
+		}
+		
+		// Using jQuery's html() here because of IE bug.
+		$("#lists").html(listsOptions);
+	},
+	error: function() {
+		alert("Twitter appears to be having trouble. Sorry about that. Please try again in a few minutes.");
+	}
+});
+
+// Bind to friend list selector
+$('#listFilter').change(function(e) {
+	console.log(e);
+	
+	var searchDom = document.getElementById("friendSearch");
+	
+	if (e.target.selectedIndex === 0) {
+		// Display all friends
+		$(".friend").removeClass("hidden");
+		
+		// Deselect friends, trigger change event
+		$("input:checked").attr("checked", false).trigger("change");
+		
+		// Show search box
+		searchDom.className = "";
+		
+	} else {
+		// Filter friends list
+		
+		// Disable, clear search
+		searchDom.className = "hidden";
+		searchDom.value = "";
+		
+		// Deselect any selected friends, trigger change event
+		$("input:checked").attr("checked", false).trigger("change");
+		
+		// Hide all friends
+		$(".friend").addClass("hidden");
+		
+		// Display and select friends on list
+		// Explode value of friends list
+		// Loop through, displaying and selecting friends in list
+		var friendsToSelect = e.target.value.split(",");
+		for (var i = 0, iMax = friendsToSelect.length; i < iMax; i++) {
+			$("#friend-"+friendsToSelect[i]).attr("checked", true).trigger("change");
+		}
+	}
+});
+
 // Disable enter/return key
 $('#friendSearch').keypress(function(e) {
 	if (e.which == 13) {
@@ -143,15 +172,6 @@ $('#friendSearch').keyup(function(e) {
 	
 		// Show all friends
 		$('.friend').removeClass('hidden');
-	}
-});
-
-$('input[type="checkbox"]').change(function(e) {
-	// Change containing <li> style to indicate selection
-	if (e.target.checked) {
-		$(this).parent().parent().addClass('friendSelected');
-	} else {
-		$(this).parent().parent().removeClass('friendSelected');
 	}
 });
 </script>
