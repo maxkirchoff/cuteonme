@@ -35,12 +35,17 @@ require('./template/header.php');
 	<h3 class="bottomless">Select your friends with great taste.</h3>
 	<p class="label clearfix">We&rsquo;ll send an individual message to each one</p>
 	
-	<div>
-		<select id="listFilter">
-			<option value="">All Friends</option>
-			<optgroup id="lists" label="Or select a list:"></optgroup>
-		</select>
-		<input type="search" id="friendSearch" placeholder="Search for a friend" />
+	<div class="span-16 clearfix">
+		<div class="span-8">
+			<select id="listFilter" name="listFilter" class="hidden">
+				<option value="">All Friends</option>
+				<optgroup id="lists" label="Or select a list:"></optgroup>
+			</select>
+			&nbsp;
+		</div>
+		<div class="span-8 last right">
+			<input type="search" id="friendSearch" placeholder="Search for a friend" />
+		</div>
 	</div>
 	<ul id="friends" class="loading"></ul>
 	
@@ -70,8 +75,6 @@ $.ajax({
 	url: "/xhr-friends.php",
 	dataType: "json",
 	success: function(r) {
-		console.log(r);
-		
 		// Generate friends markup
 		var friendsLis = "";
 		
@@ -100,13 +103,18 @@ $.ajax({
 		});
 		
 		// Setup lists list
-		var listsOptions = "";
-		for (i = 0, iMax = r.lists.length; i < iMax; i++) {
-			listsOptions += '<option value="'+ r.lists[i].friends.join(",") +'">'+ r.lists[i].name +'</option>';
+		if (r.lists.length > 0) {
+			var listsOptions = "";
+			for (i = 0, iMax = r.lists.length; i < iMax; i++) {
+				listsOptions += '<option value="'+ r.lists[i].friends.join(",") +'">'+ r.lists[i].name +'</option>';
+			}
+			
+			// Using jQuery's html() here because of IE bug.
+			$("#lists").html(listsOptions);
+			
+			// Make the select visible
+			document.getElementById("listFilter").className = "";
 		}
-		
-		// Using jQuery's html() here because of IE bug.
-		$("#lists").html(listsOptions);
 	},
 	error: function() {
 		alert("Twitter appears to be having trouble. Sorry about that. Please try again in a few minutes.");
@@ -115,8 +123,6 @@ $.ajax({
 
 // Bind to friend list selector
 $('#listFilter').change(function(e) {
-	console.log(e);
-	
 	var searchDom = document.getElementById("friendSearch");
 	
 	if (e.target.selectedIndex === 0) {

@@ -356,8 +356,6 @@ h2 {
 }
 
 #friendSearch {
-	display: inline-block;
-	float: right;
 	width: 180px;
 }
 
@@ -478,4 +476,7 @@ h4 {
 }
 .hidden {
 	display: none !important;
+}
+.marginless {
+	margin: 0;
 }

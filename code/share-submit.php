@@ -103,12 +103,59 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 <p>A direct message has been sent to your selected friends on Twitter.</p>
 <p>Return to <a href="http://cuteon.me/" <?= (!empty($_REQUEST['ref']))? 'target="_blank"' : '' ?>><em>Cute On Me</em></a> later to see the results.</p>
 
+<?php if (empty($_REQUEST['listFilter']) && (count($friendUserIds) > 1)): ?>
+	<hr />
+	<p class="bottomless">Save these friends to a list for faster sharing?</p>
+	<form id="listForm" action="/xhr-createlist.php" method="post">
+		<div id="listFields"><div class="span-16 bottom">
+			<div class="span-8">
+				<input id="listUsers" name="listUsers" type="hidden" value="<?= implode(',', $friendUserIds) ?>" />
+				<input id="listName" name="listName" type="text" placeholder="List Name" class="text" />
+			</div>
+			<div class="span-8 last">
+				<input type="submit" value="Save" class="buttonMinor marginless" />
+			</div>
+		</div></div>
+		<div id="listSaveState" style="display:none"></div>
+		<div id="listSaveResult" style="display:none"></div>
+	</form>
+	<hr />
+	<script type="text/javascript">
+		$("#listForm").submit(function() {
+			$("#listFields").slideUp();
+			$("#listSaveResult").slideUp();
+			$("#listSaveState").addClass("info").html("<em>Saving list&hellip;</em>").slideDown();
+			
+			$.ajax({
+				type: "POST",
+				url: "/xhr-createlist.php",
+				data: {
+					listUsers: document.getElementById('listUsers').value,
+					listName: document.getElementById('listName').value
+				},
+				success: function(r) {
+					$("#listSaveResult").addClass("success").html("Great! Your friend list was created.").slideDown();
+					$("#listSaveState").slideUp();
+				},
+				error: function() {
+					$("#listSaveResult").addClass("error").html("There was an error creating your friend list. Twitter may be down. Please try again.").slideDown();
+					
+					$("#listSaveState").slideUp();
+					$("#listFields").slideDown();
+				}
+			});
+			
+			return false;
+		});
+	</script>
+<?php endif; ?>
+
 <?php if (empty($_REQUEST['ref'])): // Hide this when invoked from a browser extension
 
 	/* Detect Chrome */
 	if (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false):
 ?>
-	<p><strong>Next time,</strong> try the <a href="/chrome/cuteonme.crx">Chrome extension</a> for faster sharing!</p>
+	<p><strong>Next time,</strong> try the <a href="/chrome/cuteonme.crx">Chrome extension</a>!</p>
 <?php
 	endif;
 ?>

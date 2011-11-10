@@ -304,8 +304,8 @@ $.ajax({
 		for (var i = 0, iMax = r.length; i < iMax; i++) {
 			if (r[i].title) {
 				title = r[i].title;
-				if (title.length > 48) {
-					title = title.substr(0, 48) + "&hellip;";
+				if (title.length > 45) {
+					title = title.substr(0, 45) + "&hellip;";
 				}
 				document.getElementById("pageTitle"+i).innerHTML = title;
 			}
