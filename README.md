@@ -80,4 +80,3 @@ Test your installation
     # response should be: "Installation successful!"
 
 Try out the app <http://CuteOn.Me>
-

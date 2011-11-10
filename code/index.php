@@ -282,11 +282,15 @@ foreach($friendsApiResults as $friendsApiResult)
 
 <!-- Pagination -->
 <p class="right small">
-<?php if ($previousPageNumber != 0): ?>
+<?php if ($previousPageNumber !== 0): ?>
 	<a href="/?page=<?= $previousPageNumber ?>">&laquo; Newer</a>
 <?php endif; ?>
+
+<?php if (($pageNumber !== 1) || (($pageNumber === 1) && ($nextPageNumber !== 0))): ?>
 	Page <?= $pageNumber ?>
-<?php if ($nextPageNumber != 0): ?>
+<?php endif; ?>	
+
+<?php if ($nextPageNumber !== 0): ?>
 	<a href="/?page=<?= $nextPageNumber ?>">Older &raquo;</a>
 <?php endif; ?>
 </p>

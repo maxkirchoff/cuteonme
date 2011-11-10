@@ -106,6 +106,7 @@ foreach ($results['awesm_urls'] as $awesmUrlObject)
 <?php if (empty($_REQUEST['listFilter']) && (count($friendUserIds) > 1)): ?>
 	<hr />
 	<p class="bottomless">Save these friends to a list for faster sharing?</p>
+	<p class="label bottomless">Don&rsquo;t worry, this Twitter list will be private.</p>
 	<form id="listForm" action="/xhr-createlist.php" method="post">
 		<div id="listFields"><div class="span-16 bottom">
 			<div class="span-8">
