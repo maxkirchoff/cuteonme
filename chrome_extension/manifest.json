@@ -7,7 +7,7 @@
 		"default_title": "CuteOn.Me",
 		"default_popup": "popup.html"
 	},
-	"update_url": "http://localhost/chrome/updates.xml",
+	"update_url": "http://www.cuteon.me/chrome/updates.xml",
 	"permissions": [
 		"http://*/*",
 		"https://*/*",
