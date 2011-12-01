@@ -5,7 +5,7 @@ Try it out at <http://CuteOn.Me>
 
 Read more about [how it works](/awesm/cuteonme/blob/master/docs/how-it-works.md)
 
-Or just go take a look at the code
+Or just go take a look at the code. The live site uses the performance branch, which has additional logic for features like the Google Chrome extension, Embed.ly item previews, and asynchronous Twitter friend lists. As these features complicate the code, we recommend reviewing the <code>master</code> branch first.
 
 ### Code Guide
 
