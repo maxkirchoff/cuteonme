@@ -25,4 +25,6 @@ require('./template/header.php');
 	<div class="span-7 last"><img src="/static/img/home.jpg" alt="" /></div>
 </div>
 
+<div class="demo-notice"><em>Cute On Me</em> is a demonstration of the awe.sm platform. <a href="http://developers.awe.sm/solutions/cuteonme/">Learn more &raquo;</a></div>
+
 <?php require('./template/footer.php'); ?>

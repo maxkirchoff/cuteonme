@@ -413,3 +413,84 @@ h2 {
 	margin-bottom: 3em;
 	padding-bottom: 3em;
 }
+
+.extensionCallout {
+	background-color: #552b3c;
+	-webkit-border-radius:	1em;
+	-moz-border-radius:		1em;
+	border-radius:			1em;
+	color: #f0f0f0;
+	display: none;
+	font-size: .8em;
+	padding: .25em;
+	position: absolute;
+	right: 1em;
+	text-align: center;
+	width: 200px;
+}
+	.extensionCallout a {
+		color: #fff;
+	}
+	.extensionCalloutNotch {
+		position: absolute;
+		top: -10px;
+		right: 20px;
+		margin: 0;
+		border-top: 0;
+		border-left: 10px solid transparent;
+		border-right: 10px solid transparent;
+		border-bottom: 10px solid #552b3c;
+		padding: 0;
+		width: 0;
+		height: 0;
+	}
+	.extensionCalloutContainer:hover .extensionCallout {
+		display: block;
+	}
+
+.relative {
+	position: relative;
+}
+
+iframe {
+	border: 5px solid #552b3c;
+	border-left: none;
+	border-right: none;
+}
+
+.previewImg {
+	width: 140px;
+}
+
+h4 {
+	border-bottom: 1px solid #ddd;
+	padding-bottom: .5em;
+}
+
+.demo-notice {
+	border: 1px solid #ddd;
+	border-left: none;
+	border-right: none;
+	color: #999;
+	font-size: .9em;
+	padding: 1em 0;
+	margin-bottom: 2em;
+	text-align: center;
+}
+.demo-notice a {
+	color: #777;
+}
+
+.bottom {
+	padding-bottom: 3em;
+}
+.bottomless {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+.hidden {
+	display: none !important;
+}
+.marginless {
+	margin: 0;
+}
