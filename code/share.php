@@ -77,7 +77,7 @@ foreach($friendsBatch as $batch)
 	<h3 class="bottomless">Link</h3>
 	<p class="label">Paste the page where your friends can check it out</p>
 	<p><input type="text" name="url" class="text"
-		placeholder="http://amazon.com/item123" value="<?= @$_REQUEST['url'] ?>" /></p>
+		placeholder="http://amazon.com/item123" value="<?php echo @$_REQUEST['url'] ?>" /></p>
 	
 	<h3 class="bottomless">Message</h3>
 	<p class="label">One sentence &mdash; this has to fit in a Twitter message</p>
@@ -90,10 +90,10 @@ foreach($friendsBatch as $batch)
 	
 	<ul class="friends">
 		<?php foreach($friends as $friend) { ?>
-			<li class="friend" data-name="@<?= htmlspecialchars(strtolower($friend['screen_name'].' '.$friend['name'])) ?>"><label>
-				<input type="checkbox" name="friends[]" value="<?= $friend['id'] ?>" />
-				<img src="<?= $friend['profile_image_url'] ?>" alt="" width="30" height="30" /> 
-				<span title="@<?= $friend['screen_name'] ?>"><?= $friend['display_name'] ?></span>
+			<li class="friend" data-name="@<?php echo htmlspecialchars(strtolower($friend['screen_name'].' '.$friend['name'])) ?>"><label>
+				<input type="checkbox" name="friends[]" value="<?php echo $friend['id'] ?>" />
+				<img src="<?php echo $friend['profile_image_url'] ?>" alt="" width="30" height="30" />
+				<span title="@<?php echo $friend['screen_name'] ?>"><?php echo $friend['display_name'] ?></span>
 			</label></li>
 		<?php } ?>
 	</ul>

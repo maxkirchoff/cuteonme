@@ -178,13 +178,18 @@ $friendsApiResults = $connection->get(
 
 // Arrange Twitter user data in an associative array for easy lookups
 $friendsData = array();
-foreach($friendsApiResults as $friendsApiResult) 
+
+if (! isset($friendsApiResults->errors))
 {
-	$friendsData[$friendsApiResult->id] = array(
-			'id' => $friendsApiResult->id,
-			'profile_image_url' => $friendsApiResult->profile_image_url,
-			'name' => $friendsApiResult->name,
-			'screen_name' => $friendsApiResult->screen_name);
+
+    foreach($friendsApiResults as $friendsApiResult)
+    {
+        $friendsData[$friendsApiResult->id] = array(
+            'id' => $friendsApiResult->id,
+            'profile_image_url' => $friendsApiResult->profile_image_url,
+            'name' => $friendsApiResult->name,
+            'screen_name' => $friendsApiResult->screen_name);
+    }
 }
 
 ?>
@@ -208,38 +213,42 @@ foreach($friendsApiResults as $friendsApiResult)
 <?php foreach($urlData as $url) { ?>
 	<div class="span-16 clearfix result">
 		<div class="span-10">
-			<h3><a href="<?= $url['url'] ?>">
-				<?= strlen($url['title']) > 30 ? substr($url['title'], 0, 30) . "..." : $url['title']; ?>
+			<h3><a href="<?php echo $url['url'] ?>">
+				<?php echo strlen($url['title']) > 30 ? substr($url['title'], 0, 30) . "..." : $url['title']; ?>
 			</a></h3>
-			<blockquote>&ldquo;<?= $url['message'] ?>&rdquo;</blockquote>
+			<blockquote>&ldquo;<?php echo $url['message'] ?>&rdquo;</blockquote>
 			<?php
 				foreach($url['users'] as $user){
-					switch($user['response']) {
-						case 'positive':
-							$responseImage = '/static/img/thumbs-up.png';
-							$responseText = $friendsData[$user['user_id']]['screen_name'].' likes';
-							break;
-						case 'negative':
-							$responseImage = '/static/img/thumbs-down.png';
-							$responseText = $friendsData[$user['user_id']]['screen_name'].' dislikes';
-							break;
-						default:
-							$responseImage = '/static/img/qmark.png';
-							$responseText = $friendsData[$user['user_id']]['screen_name'].' has not responded';
-					}
+                    if (isset($user['user_id'])) {
+                        switch($user['response']) {
+                            case 'positive':
+                                $responseImage = '/static/img/thumbs-up.png';
+                                $responseText = $friendsData[$user['user_id']]['screen_name'].' likes';
+                                break;
+                            case 'negative':
+                                $responseImage = '/static/img/thumbs-down.png';
+                                $responseText = $friendsData[$user['user_id']]['screen_name'].' dislikes';
+                                break;
+                            default:
+                                $responseImage = '/static/img/qmark.png';
+                                $responseText = $friendsData[$user['user_id']]['screen_name'].' has not responded';
+                        }
 			?>
 				<p>
-					<img src="<?= $responseImage ?>" alt="<?= $responseText ?>" width="30" height="30" />
-					<img src="<?= $friendsData[$user['user_id']]['profile_image_url']?>"
-					alt="" width="30" height="30" /> <?= $friendsData[$user['user_id']]['screen_name'] ?>
+					<img src="<?php echo $responseImage ?>" alt="<?php echo $responseText ?>" width="30" height="30" />
+					<img src="<?php echo $friendsData[$user['user_id']]['profile_image_url']?>"
+					alt="" width="30" height="30" /> <?php echo $friendsData[$user['user_id']]['screen_name'] ?>
 				</p>
-			<?php } ?>
+			<?php
+                    }
+                }
+            ?>
 		</div>
 		<div class="span-6 last">
 			<p class="right"><img src="/static/img/thumbs-up.png" alt="cute"
-				width="30" height="30" /> <?= $url['percent_positive'] ?>% <img
+				width="30" height="30" /> <?php echo $url['percent_positive'] ?>% <img
 				src="/static/img/thumbs-down.png" alt="not cute" width="30" height="30" />
-			<?= $url['percent_negative'] ?>%</p>
+			<?php echo $url['percent_negative'] ?>%</p>
 		</div>
 	</div>
 <?php }} else { ?>
@@ -250,11 +259,11 @@ foreach($friendsApiResults as $friendsApiResult)
 <!-- Pagination -->
 <p class="right small">
 <?php if ($previousPageNumber != 0): ?>
-	<a href="/?page=<?= $previousPageNumber ?>">&laquo; Newer</a>
+	<a href="/?page=<?php echo $previousPageNumber ?>">&laquo; Newer</a>
 <?php endif; ?>
-	Page <?= $pageNumber ?>
+	Page <?php echo $pageNumber ?>
 <?php if ($nextPageNumber != 0): ?>
-	<a href="/?page=<?= $nextPageNumber ?>">Older &raquo;</a>
+	<a href="/?page=<?php echo $nextPageNumber ?>">Older &raquo;</a>
 <?php endif; ?>
 </p>
 

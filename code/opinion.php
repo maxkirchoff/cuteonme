@@ -40,11 +40,11 @@ else
 <!--  Voting Bar  -->
 <div>
 	<div class="container" id="voteScreen"><!--  Show the sharer's information and message  -->
-		<div class="span-2"><img src="<?= $sharerIconUrl ?>" alt="" width="70"
+		<div class="span-2"><img src="<?php echo $sharerIconUrl ?>" alt="" width="70"
 			height="70" /></div>
 		<div class="span-10">
-			<p><em>@<?= $_REQUEST['sharer'] ?> wants to know:</em><br />
-				&quot;<?= $_REQUEST['message'] ?>&quot;</p>
+			<p><em>@<?php echo $_REQUEST['sharer'] ?> wants to know:</em><br />
+				&quot;<?php echo $_REQUEST['message'] ?>&quot;</p>
 		</div>
 
 		<!--  Show voting options for the friend  -->
@@ -58,21 +58,21 @@ else
 
 	<!--  Post-voting message  -->
 	<div class="container" id="thankScreen" style="display: none">
-		<div class="span-2"><img src="<?= $sharerIconUrl ?>" alt="" width="70"
+		<div class="span-2"><img src="<?php echo $sharerIconUrl ?>" alt="" width="70"
 			height="70" /></div>
 		<div class="span-14 last">
-			<p>Thanks for helping out <em>@<?= $_REQUEST['sharer'] ?></em>!<br />
+			<p>Thanks for helping out <em>@<?php echo $_REQUEST['sharer'] ?></em>!<br />
 				<a href="/">Need shopping advice yourself?</a></p>
 		</div>
 	</div>
 </div>
 
 <!--  URL display   -->
-<iframe src="<?= $_REQUEST['url'] ?>" width="100%" height="89%"
+<iframe src="<?php echo $_REQUEST['url'] ?>" width="100%" height="89%"
 	frameborder="0"></iframe>
 
 <!--  awe.sm Conversion Javascript  -->
-<script src="http://widgets.awe.sm/v3/widgets.js?key=<?= API_KEY ?>"></script>
+<script src="http://widgets.awe.sm/v3/widgets.js?key=<?php echo API_KEY ?>"></script>
 <script>
 function voteYes() {
 	AWESM.convert('goal_1',0);
